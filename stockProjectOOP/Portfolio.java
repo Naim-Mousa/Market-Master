@@ -1,7 +1,9 @@
 package stockProjectOOP;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Portfolio {
 
@@ -87,5 +89,39 @@ public class Portfolio {
      */
     public List<PortfolioItem> getPortfolioItems() {
         return new ArrayList<>(this.items); // Return a copy
+    }
+
+    /**
+     * Retrieves the price history of a specific stock in the portfolio.
+     *
+     * @param stockName The name of the stock.
+     * @return List<Double> representing the price history of the stock, or null if
+     *         the stock is not in the portfolio.
+     */
+    public List<Double> getPriceHistory(String stockName) {
+        for (PortfolioItem item : items) {
+            if (item.getStockName().equals(stockName)) {
+                return item.getStockPriceHistory();
+            }
+        }
+        return null; // Stock not found in the portfolio
+    }
+
+    /**
+     * Retrieves the price history for each stock in the portfolio.
+     *
+     * @return A map where each key is a stock name and each value is the price
+     *         history of that stock.
+     */
+    public Map<String, List<Double>> getAllPriceHistories() {
+        Map<String, List<Double>> priceHistoryMap = new HashMap<>();
+
+        for (PortfolioItem item : items) {
+            String stockName = item.getStockName();
+            List<Double> stockPriceHistory = getPriceHistory(stockName);
+            priceHistoryMap.put(stockName, stockPriceHistory);
+        }
+
+        return priceHistoryMap;
     }
 }
