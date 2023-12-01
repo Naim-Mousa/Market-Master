@@ -1,51 +1,48 @@
 package stockProjectOOP;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Portfolio {
 
     private List<PortfolioItem> items;
 
     /*
-     * Purpose: Initializes the Portfolio instance.
-     * Process: Sets up an empty list (ArrayList) of PortfolioItem objects to store
-     * the user's portfolio items.
+     * Constructor for Portfolio class.
+     * Initializes the Portfolio instance with an
+     * empty list of PortfolioItem objects.
+     * 
      */
     public Portfolio() {
         this.items = new ArrayList<>();
     }
 
-    /*
-     * Input: PortfolioItem item - the PortfolioItem object to add to the portfolio.
-     * Purpose: Adds a new stock item to the user's portfolio.
-     * Process: Appends the given PortfolioItem to the items list.
-     * Output: None.
+    /**
+     * Adds a PortfolioItem to the portfolio.
+     * 
+     * @param item The PortfolioItem object to be added.
      */
     public void addPortfolioItem(PortfolioItem item) {
         this.items.add(item);
     }
 
-    /*
-     * Input: PortfolioItem item - the PortfolioItem object to remove from the
-     * portfolio.
-     * Purpose: Removes a specified stock item from the user's portfolio.
-     * Process: Attempts to remove the given PortfolioItem from the items list.
-     * Output: boolean - Returns true if the item was successfully removed, false
-     * otherwise.
+    /**
+     * Removes a PortfolioItem from the portfolio.
+     * 
+     * @param item The PortfolioItem object to be removed.
+     * @return true if the item was successfully removed, false otherwise.
      */
     public boolean removePortfolioItem(PortfolioItem item) {
         return this.items.remove(item);
     }
 
-    /*
-     * Input: String stockName - the name of the stock to search for in the
-     * portfolio.
-     * Purpose: Retrieves a specific PortfolioItem based on the stock name.
-     * Process: Iterates through the items list and returns the PortfolioItem with a
-     * matching stock name.
-     * Output: PortfolioItem - Returns the found item, or null if no matching item
-     * is found.
+    /**
+     * Retrieves a specific PortfolioItem based on the stock name.
+     * 
+     * @param stockName The name of the stock.
+     * @return The PortfolioItem with the matching stock name, or null if not found.
      */
     public PortfolioItem getPortfolioItem(String stockName) {
         for (PortfolioItem item : this.items) {
@@ -56,12 +53,10 @@ public class Portfolio {
         return null; // Return null if the item is not found
     }
 
-    /*
-     * Input: None.
-     * Purpose: Calculates the total current value of all stocks in the portfolio.
-     * Process: Sums up the current value (getCurrentValue()) of each PortfolioItem
-     * in the items list.
-     * Output: double - The total value of the portfolio.
+    /**
+     * Calculates the total current value of all stocks in the portfolio.
+     * 
+     * @return The total value of the portfolio.
      */
     public double getTotalValue() {
         double totalValue = 0.0;
@@ -71,15 +66,11 @@ public class Portfolio {
         return totalValue;
     }
 
-    /*
-     * Input: None.
-     * Purpose: Calculates the total profit or loss of the portfolio since the
-     * stocks were purchased.
-     * Process: For each PortfolioItem, calculates the difference between its
-     * current value and the total purchase price (purchase price per share
-     * multiplied by the number of shares owned). Sums up these differences to
-     * determine the overall profit or loss.
-     * Output: double - The total profit or loss of the portfolio.
+    /**
+     * Calculates the total profit or loss of the portfolio
+     * since the stocks were purchased.
+     * 
+     * @return The total profit or loss of the portfolio.
      */
     public double getProfitOrLoss() {
         double profitOrLoss = 0.0;
@@ -91,15 +82,46 @@ public class Portfolio {
         return profitOrLoss;
     }
 
-    /*
-     * Input: None.
-     * Purpose: Provides a list of all PortfolioItem objects in the portfolio.
-     * Process: Returns a new list (ArrayList) containing all PortfolioItem objects
-     * from the items list. This approach ensures that the original list cannot be
-     * modified directly, preserving data integrity.
-     * Output: List<PortfolioItem> - A list of all portfolio items.
+    /**
+     * Provides a list of all PortfolioItem objects in the portfolio.
+     * 
+     * @return A list of all portfolio items.
      */
     public List<PortfolioItem> getPortfolioItems() {
-        return new ArrayList<>(this.items); // Return a copy for immutability
+        return new ArrayList<>(this.items); // Return a copy
+    }
+
+    /**
+     * Retrieves the price history of a specific stock in the portfolio.
+     *
+     * @param stockName The name of the stock.
+     * @return List<Double> representing the price history of the stock, or null if
+     *         the stock is not in the portfolio.
+     */
+    public List<Double> getPriceHistory(String stockName) {
+        for (PortfolioItem item : items) {
+            if (item.getStockName().equals(stockName)) {
+                return item.getStockPriceHistory();
+            }
+        }
+        return null; // Stock not found in the portfolio
+    }
+
+    /**
+     * Retrieves the price history for each stock in the portfolio.
+     *
+     * @return A map where each key is a stock name and each value is the price
+     *         history of that stock.
+     */
+    public Map<String, List<Double>> getAllPriceHistories() {
+        Map<String, List<Double>> priceHistoryMap = new HashMap<>();
+
+        for (PortfolioItem item : items) {
+            String stockName = item.getStockName();
+            List<Double> stockPriceHistory = getPriceHistory(stockName);
+            priceHistoryMap.put(stockName, stockPriceHistory);
+        }
+
+        return priceHistoryMap;
     }
 }

@@ -36,7 +36,7 @@ public interface Trader {
     double getBudget();
 
     // !!!!!!!!!!!!!!
-    // FUNCTIONS WE SHOULD / NEED TO IMPLEMENT
+    // FUNCTIONS WE SHOULD IMPLEMENT
     // IN USER+AGENT CLASSES
 
     /**
@@ -53,4 +53,15 @@ public interface Trader {
      * @return List<Double> representing the historical price data.
      */
     // List<Double> analyzeStockPerformance(Stock stock);
+
+    /**
+     * Provides an overview of the trader's portfolio performance, including total
+     * profit or loss.
+     * 
+     * @return String summary of portfolio performance.
+     */
+    // String viewPortfolioPerformance();
+
+    // If we want, we can add a watch/wish list (requires add, remove, and view
+    // functions)
 }
