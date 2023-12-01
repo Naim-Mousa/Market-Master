@@ -1,18 +1,28 @@
 package stockProjectOOP;
 
+import java.util.List;
+
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 public class MainInterface extends javax.swing.JFrame {
+    public static int WEEKS = 0;
 
     /**
      * Creates new form MainInterface
      */
     public MainInterface() {
         initComponents();
-        graphs.add("Stock 1", createChartPanel("Stock 1"));
-        graphs.add("Stock 2", createChartPanel("Stock 2"));
-        graphs.add("Stock 3", createChartPanel("Stock 3"));
+
+        Market market = new Market();
+        for (int i = 0; i < 3; i++){
+            market.Simulate_Week();
+            WEEKS++;
+        }
+
+        for (Stock stock : market.market) {
+            graphs.add(stock.getStockName(), createChartPanel(stock));
+        }
     }
 
     /**
@@ -224,16 +234,20 @@ public class MainInterface extends javax.swing.JFrame {
         });
     }
     
-    private static ChartPanel createChartPanel(String stockName){
+    private static ChartPanel createChartPanel(Stock stock){
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        
-        dataset.addValue(50, stockName, "Week 1");
-        dataset.addValue(60, stockName, "Week 2");
-        dataset.addValue(55, stockName, "Week 3");
+
+        List<Double> priceHistory = stock.getPriceHistory();
+        int i = 0;
+
+        for (Double price : priceHistory) {
+            dataset.addValue(price, stock.getStockName(), "Week " + i);
+            i++;
+        }
         
         
         JFreeChart chart = ChartFactory.createLineChart(
-                stockName,
+                stock.getStockName() + " Price",
                 "Week",
                 "Price",
                 dataset,
@@ -242,6 +256,24 @@ public class MainInterface extends javax.swing.JFrame {
                 true,
                 false
         );
+
+        double minValue = Double.MAX_VALUE;
+        double maxValue = Double.MIN_VALUE;
+        for (Object rowKeyObj : dataset.getRowKeys()) {
+            Comparable<?> rowKey = (Comparable<?>) rowKeyObj;
+            for (Object columnKeyObj : dataset.getColumnKeys()) {
+                Comparable<?> columnKey = (Comparable<?>) columnKeyObj;
+                Number value = dataset.getValue(rowKey, columnKey);
+                if (value != null) {
+                    minValue = Math.min(minValue, value.doubleValue());
+                    maxValue = Math.max(maxValue, value.doubleValue());
+                }
+            }
+        }
+
+        // Set the range around the data points
+        double padding = (maxValue - minValue) * 0.1; // 10% padding
+        chart.getCategoryPlot().getRangeAxis().setRange(minValue - padding, maxValue + padding);
         return new ChartPanel(chart);
     }
 

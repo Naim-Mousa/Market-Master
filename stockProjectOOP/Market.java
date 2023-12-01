@@ -65,7 +65,7 @@ OUTPUT: none
             stock.simulate(this.marketTrend);
         }
 
-        executeAgentTrades(); // Agent makes trades during the simulation
+        // executeAgentTrades(); // Agent makes trades during the simulation
     }
 
 /*=======================
