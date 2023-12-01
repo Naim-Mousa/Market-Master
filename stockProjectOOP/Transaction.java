@@ -1,5 +1,6 @@
 package stockProjectOOP;
 
 public class Transaction {
-    //Write transactions
+    // Write transactions
+
 }
