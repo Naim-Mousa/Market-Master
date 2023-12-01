@@ -1,11 +1,27 @@
 package stockProjectOOP;
 
 public class Transaction {
-    // Write transactions
+
+    /**
+     * Checks if the trader has enough funds to buy a specified number of shares of
+     * a stock.
+     *
+     * @param trader The trader (User or Agent).
+     * @param stock  The stock to be purchased.
+     * @param shares Number of shares to buy.
+     * @return true if the trader has enough funds, false otherwise.
+     */
+    private static boolean checkFunds(Trader trader, Stock stock, int shares) {
+        if (trader == null || stock == null) {
+            return false;
+        }
+        double cost = stock.getPrice() * shares;
+        return trader.getBudget() >= cost;
+    }
 
     /**
      * Buys stocks for a trader.
-     * 
+     *
      * @param trader The trader (User or Agent) buying the stock.
      * @param stock  The stock to be purchased.
      * @param shares Number of shares to buy.
@@ -17,8 +33,7 @@ public class Transaction {
         }
 
         // Check if the trader has enough budget
-        double cost = stock.getPrice() * shares;
-        if (trader.getBudget() >= cost) {
+        if (checkFunds(trader, stock, shares)) {
             return trader.buyShares(stock, shares);
         }
         return false;
