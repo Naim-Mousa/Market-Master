@@ -2,11 +2,15 @@ package stockProjectOOP;
 
 import java.util.List;
 
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 public class MainInterface extends javax.swing.JFrame {
     public static int WEEKS = 0;
+     Market market = new Market();
 
     /**
      * Creates new form MainInterface
@@ -14,7 +18,6 @@ public class MainInterface extends javax.swing.JFrame {
     public MainInterface() {
         initComponents();
 
-        Market market = new Market();
         for (int i = 0; i < 3; i++){
             market.Simulate_Week();
             WEEKS++;
@@ -23,6 +26,23 @@ public class MainInterface extends javax.swing.JFrame {
         for (Stock stock : market.market) {
             graphs.add(stock.getStockName(), createChartPanel(stock));
         }
+
+        // Set initial values for text fields
+        Stock stock = market.market.get(0);
+        updateTextFields(stock);
+
+        weekTxt.setText(Integer.toString(WEEKS));
+
+        graphs.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent evt){
+                JTabbedPane pane = (JTabbedPane) evt.getSource();
+                int selectedIndex = pane.getSelectedIndex();
+                if (selectedIndex != -1){
+                    Stock stock = market.market.get(selectedIndex);
+                    updateTextFields(stock);
+                }
+            }
+        });
     }
 
     /**
@@ -46,10 +66,13 @@ public class MainInterface extends javax.swing.JFrame {
         lastPriceTxt = new javax.swing.JTextField();
         percentChangeLbl = new javax.swing.JLabel();
         percentChangeTxt = new javax.swing.JTextField();
-        lastPricelbl1 = new javax.swing.JLabel();
-        lastPriceTxt1 = new javax.swing.JTextField();
-        lastPriceTxt2 = new javax.swing.JTextField();
-        lastPricelbl2 = new javax.swing.JLabel();
+        marketCapLbl = new javax.swing.JLabel();
+        marketCapTxt = new javax.swing.JTextField();
+        priceVolTxt = new javax.swing.JTextField();
+        priceVolLbl = new javax.swing.JLabel();
+        weeklbl = new javax.swing.JLabel();
+        weekTxt = new javax.swing.JTextField();
+        simulate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,7 +87,7 @@ public class MainInterface extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         currentPricelbl.setBackground(new java.awt.Color(0, 0, 0));
-        currentPricelbl.setText("Price:");
+        currentPricelbl.setText("Curr Price:");
 
         lastPricelbl.setBackground(new java.awt.Color(0, 0, 0));
         lastPricelbl.setText("Last Price: ");
@@ -74,19 +97,24 @@ public class MainInterface extends javax.swing.JFrame {
         lastPriceTxt.setEditable(false);
 
         percentChangeLbl.setBackground(new java.awt.Color(0, 0, 0));
-        percentChangeLbl.setText("Percent Change: ");
+        percentChangeLbl.setText("% Change:      ");
 
         percentChangeTxt.setEditable(false);
 
-        lastPricelbl1.setBackground(new java.awt.Color(0, 0, 0));
-        lastPricelbl1.setText("Market Cap:");
+        marketCapLbl.setBackground(new java.awt.Color(0, 0, 0));
+        marketCapLbl.setText("Market Cap:");
 
-        lastPriceTxt1.setEditable(false);
+        marketCapTxt.setEditable(false);
 
-        lastPriceTxt2.setEditable(false);
+        priceVolTxt.setEditable(false);
 
-        lastPricelbl2.setBackground(new java.awt.Color(0, 0, 0));
-        lastPricelbl2.setText("Volatility: ");
+        priceVolLbl.setBackground(new java.awt.Color(0, 0, 0));
+        priceVolLbl.setText("Price Vol: ");
+
+        weeklbl.setBackground(new java.awt.Color(0, 0, 0));
+        weeklbl.setText("Week:");
+
+        weekTxt.setEditable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -110,43 +138,50 @@ public class MainInterface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lastPricelbl1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(marketCapLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(lastPriceTxt1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(marketCapTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lastPricelbl2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(priceVolLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lastPriceTxt2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(priceVolTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(weeklbl, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56)
+                        .addComponent(weekTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(44, 44, 44))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(currentPricelbl)
-                            .addComponent(currentPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lastPricelbl)
-                            .addComponent(lastPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(percentChangeLbl)
-                            .addComponent(percentChangeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lastPricelbl1)
-                            .addComponent(lastPriceTxt1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lastPricelbl2)
-                            .addComponent(lastPriceTxt2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(currentPricelbl)
+                    .addComponent(currentPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(marketCapLbl)
+                    .addComponent(marketCapTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lastPricelbl)
+                    .addComponent(lastPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(priceVolLbl)
+                    .addComponent(priceVolTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(percentChangeLbl)
+                    .addComponent(percentChangeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(weeklbl)
+                    .addComponent(weekTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(8, Short.MAX_VALUE))
         );
+
+        simulate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        simulate.setText("Simulate");
+        simulate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                simulateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -155,9 +190,12 @@ public class MainInterface extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(graphs, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(graphs, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(simulate, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(viewPortfolio, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buyStocks, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,7 +210,9 @@ public class MainInterface extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(viewPortfolio, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(52, 52, 52)
-                        .addComponent(buyStocks, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buyStocks, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(simulate, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(45, 45, 45)
                         .addComponent(sellStocks, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(82, 82, 82))
@@ -187,7 +227,9 @@ public class MainInterface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,7 +239,29 @@ public class MainInterface extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>       
+    
+
+    private void simulateActionPerformed(java.awt.event.ActionEvent evt) {     
+        market.Simulate_Week();
+        WEEKS++;
+        graphs.removeAll();
+        
+        for (Stock stock : market.market) {
+            graphs.add(stock.getStockName(), createChartPanel(stock));
+        }
+        weekTxt.setText(Integer.toString(WEEKS));
+    }     
+
+    private void updateTextFields(Stock stock){
+        // set current price to 2 decimal places with formatting
+        currentPriceTxt.setText(String.format("%.2f", stock.getPrice()));
+        lastPriceTxt.setText(String.format("%.2f", stock.getPriceHistory().get(stock.getPriceHistory().size() - 2)));
+        percentChangeTxt.setText(String.format("%.2f", (stock.getPrice() - stock.getPriceHistory().get(stock.getPriceHistory().size() - 2)) / stock.getPriceHistory().get(stock.getPriceHistory().size() - 2) * 100) + "%");
+        marketCapTxt.setText(String.format("%.2f", stock.getMarketCap()));
+        priceVolTxt.setText(String.format("%.2f", stock.getVolatility()));
+    }
+    
 
     /**
      * @param args the command line arguments
@@ -241,7 +305,7 @@ public class MainInterface extends javax.swing.JFrame {
         int i = 0;
 
         for (Double price : priceHistory) {
-            dataset.addValue(price, stock.getStockName(), "Week " + i);
+            dataset.addValue(price, stock.getStockName(), (Comparable<?>) i);
             i++;
         }
         
@@ -274,6 +338,7 @@ public class MainInterface extends javax.swing.JFrame {
         // Set the range around the data points
         double padding = (maxValue - minValue) * 0.1; // 10% padding
         chart.getCategoryPlot().getRangeAxis().setRange(minValue - padding, maxValue + padding);
+        
         return new ChartPanel(chart);
     }
 
@@ -285,14 +350,17 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField lastPriceTxt;
-    private javax.swing.JTextField lastPriceTxt1;
-    private javax.swing.JTextField lastPriceTxt2;
     private javax.swing.JLabel lastPricelbl;
-    private javax.swing.JLabel lastPricelbl1;
-    private javax.swing.JLabel lastPricelbl2;
+    private javax.swing.JLabel marketCapLbl;
+    private javax.swing.JTextField marketCapTxt;
     private javax.swing.JLabel percentChangeLbl;
     private javax.swing.JTextField percentChangeTxt;
+    private javax.swing.JLabel priceVolLbl;
+    private javax.swing.JTextField priceVolTxt;
     private javax.swing.JButton sellStocks;
+    private javax.swing.JButton simulate;
     private javax.swing.JButton viewPortfolio;
+    private javax.swing.JTextField weekTxt;
+    private javax.swing.JLabel weeklbl;
     // End of variables declaration                   
 }
