@@ -5,6 +5,9 @@ import java.util.List;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -18,7 +21,18 @@ public class MainInterface extends javax.swing.JFrame {
     public MainInterface() {
         initComponents();
 
-        for (int i = 0; i < 3; i++){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((screenSize.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((screenSize.getHeight() - this.getHeight()) / 2);
+        this.setLocation(x, y);
+
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentMoved(ComponentEvent e) {
+                setLocation(x, y);
+            }
+        });
+
+        for (int i = 0; i < 5; i++){
             market.Simulate_Week();
             WEEKS++;
         }
@@ -76,18 +90,35 @@ public class MainInterface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        this.setResizable(false);
+
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
         viewPortfolio.setText("View Portfolio");
+        viewPortfolio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewPortfolioActionPerformed(evt);
+            }
+        });
 
         buyStocks.setText("Buy Stocks");
+        buyStocks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyStocksActionPerformed(evt);
+            }
+        });
 
         sellStocks.setText("Sell Stocks");
+        sellStocks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellStocksActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         currentPricelbl.setBackground(new java.awt.Color(0, 0, 0));
-        currentPricelbl.setText("Curr Price:");
+        currentPricelbl.setText("Current Price:");
 
         lastPricelbl.setBackground(new java.awt.Color(0, 0, 0));
         lastPricelbl.setText("Last Price: ");
@@ -97,7 +128,7 @@ public class MainInterface extends javax.swing.JFrame {
         lastPriceTxt.setEditable(false);
 
         percentChangeLbl.setBackground(new java.awt.Color(0, 0, 0));
-        percentChangeLbl.setText("% Change:      ");
+        percentChangeLbl.setText("Percent Change: ");
 
         percentChangeTxt.setEditable(false);
 
@@ -109,7 +140,7 @@ public class MainInterface extends javax.swing.JFrame {
         priceVolTxt.setEditable(false);
 
         priceVolLbl.setBackground(new java.awt.Color(0, 0, 0));
-        priceVolLbl.setText("Price Vol: ");
+        priceVolLbl.setText("Price Volatility: ");
 
         weeklbl.setBackground(new java.awt.Color(0, 0, 0));
         weeklbl.setText("Week:");
@@ -239,7 +270,7 @@ public class MainInterface extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>       
+    }// </editor-fold>          
     
 
     private void simulateActionPerformed(java.awt.event.ActionEvent evt) {     
@@ -252,6 +283,24 @@ public class MainInterface extends javax.swing.JFrame {
         }
         weekTxt.setText(Integer.toString(WEEKS));
     }     
+
+    private void viewPortfolioActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        ViewPortfolio viewPortfolio = new ViewPortfolio(this);
+        viewPortfolio.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void buyStocksActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        BuyStocks buyStocks = new BuyStocks(this);
+        buyStocks.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void sellStocksActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        SellStocks sellStocks = new SellStocks(this);
+        sellStocks.setVisible(true);
+        this.setVisible(false);
+    }
 
     private void updateTextFields(Stock stock){
         // set current price to 2 decimal places with formatting
