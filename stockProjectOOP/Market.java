@@ -10,12 +10,13 @@ public class Market {
     private Agent agent = new Agent(10000);
     private static final Random random = new Random();
 
-/*=======================
-Constructor: Market
-INPUT: none
-PROCESSING: Initializes the market with a default trend and predefined stocks
-OUTPUT: none
-=======================*/
+/**
+ * Constructor: Market
+ * 
+ * INPUT: none
+ * PROCESSING: Initializes the market with a default trend and predefined stocks.
+ * OUTPUT: none
+ */
     public Market(){
         this.marketTrend = 0.02; // Default market trend
         
@@ -33,12 +34,13 @@ GETTERS AND SETTERS
         return this.marketTrend;
     }
 
-/*=======================
-Method: setTrend
-INPUT: none
-PROCESSING: Randomly sets the market trend within a range of -10% to +10%
-OUTPUT: none
-=======================*/
+/**
+ * Method: setTrend
+ * 
+ * INPUT: none
+ * PROCESSING: Randomly sets the market trend within a range of -10% to +10%.
+ * OUTPUT: none
+ */
     public void setTrend(){
         double minTrend = 0.90; // -10% trend
         double maxTrend = 1.10; // +10% trend
@@ -54,12 +56,13 @@ OUTPUT: none
 GENERAL METHODS
 ----------------*/
 
-/*=======================
-Method: Simulate_Week
-INPUT: none
-PROCESSING: Simulates a week's market activity, including agent trading
-OUTPUT: none
-=======================*/
+/**
+ * Method: Simulate_Week
+ * 
+ * INPUT: none
+ * PROCESSING: Simulates a week's market activity, including agent trading.
+ * OUTPUT: none
+ */
     public void Simulate_Week() {
         for (Stock stock : this.market) {
             stock.simulate(this.marketTrend);
@@ -68,12 +71,13 @@ OUTPUT: none
         // executeAgentTrades(); // Agent makes trades during the simulation
     }
 
-/*=======================
-Method: executeAgentTrades
-INPUT: none
-PROCESSING: Executes agent's trades
-OUTPUT: none
-=======================*/
+/**
+ * Method: executeAgentTrades
+ * 
+ * INPUT: none
+ * PROCESSING: Executes agent's trades.
+ * OUTPUT: none
+ */
     private void executeAgentTrades(){
         
         // Carry out 4 transactions
