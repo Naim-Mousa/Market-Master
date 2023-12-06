@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "stockProjectOOP/jfreechart-1.0.1.jar",
+        "stockProjectOOP/jcommon-1.0.0.jar"
+    ]
+}
