@@ -1,6 +1,5 @@
 package stockProjectOOP;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Trader {
@@ -27,13 +26,23 @@ public class User implements Trader {
     -------------------*/
 
     @Override
-    public List<PortfolioItem> getPortfolio() {
+    public List<PortfolioItem> getPortfolioItems() {
         return portfolio.getPortfolioItems();
+    }
+
+    @Override
+    public Portfolio getPortfolioObject() {
+        return this.portfolio;
     }
 
     @Override
     public double getBudget() {
         return budget;
+    }
+
+    @Override
+    public void setBudget(double newBudget) {
+        budget = newBudget;
     }
 
     /*--------------
@@ -55,17 +64,7 @@ public class User implements Trader {
 
     @Override
     public boolean buyShares(Stock stock, int shares) {
-
-        double cost = stock.getPrice() * shares;
-
-        if (budget >= cost) {
-            stock.buyShares(shares);
-            budget -= cost;
-            portfolio.addPortfolioItem(new PortfolioItem(stock, shares, stock.getPrice()));
-            return true;
-        }
-
-        return false;
+        return Transaction.portfolioBuy(this, stock, shares);
     }
 
     /**
@@ -105,7 +104,8 @@ public class User implements Trader {
      * 
      * @return PortfolioItem - the found PortfolioItem, or null if not found.
      */
-    private PortfolioItem findPortfolioItem(String stockName) {
+    @Override
+    public PortfolioItem findPortfolioItem(String stockName) {
         return portfolio.getPortfolioItem(stockName);
     }
 
@@ -193,7 +193,7 @@ public class User implements Trader {
         double totalInvestment = 0.0;
         double currentPortfolioValue = evaluatePortfolioValue();
 
-        for (PortfolioItem item : getPortfolio()) {
+        for (PortfolioItem item : getPortfolioItems()) {
             totalInvestment += item.getSharesOwned() * item.getPurchasePrice();
         }
 
