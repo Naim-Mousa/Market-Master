@@ -22,11 +22,18 @@ public interface Trader {
     boolean sellShares(Stock stock, int shares);
 
     /**
-     * Gets the current portfolio of the trader.
+     * Gets the current portfolio items of the trader.
      * 
      * @return A map of stock names to the number of shares owned.
      */
-    List<PortfolioItem> getPortfolio();
+    List<PortfolioItem> getPortfolioItems();
+
+    /**
+     * Gets the current portfolio object of the trader.
+     * 
+     * @return The portfolio object.
+     */
+    Portfolio getPortfolioObject();
 
     /**
      * Gets the current budget or balance of the trader.
@@ -34,6 +41,22 @@ public interface Trader {
      * @return The trader's budget.
      */
     double getBudget();
+
+    /**
+     * Sets the current budget or balance of the trader.
+     * 
+     * @param newBudget The trader's new budget.
+     * @return none.
+     */
+    void setBudget(double newBudget);
+
+    /**
+     * Searches for a PortfolioItem in the trader's portfolio by stock name.
+     *
+     * @param stockName The name of the stock to find in the portfolio.
+     * @return PortfolioItem - the found PortfolioItem, or null if not found.
+     */
+    PortfolioItem findPortfolioItem(String stockName);
 
     /**
      * Calculates the total value of the trader's portfolio.
