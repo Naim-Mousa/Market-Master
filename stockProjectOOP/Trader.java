@@ -35,16 +35,12 @@ public interface Trader {
      */
     double getBudget();
 
-    // !!!!!!!!!!!!!!
-    // FUNCTIONS WE SHOULD IMPLEMENT
-    // IN USER+AGENT CLASSES
-
     /**
      * Calculates the total value of the trader's portfolio.
      * 
      * @return double representing the total value of the portfolio.
      */
-    // double evaluatePortfolioValue();
+    double evaluatePortfolioValue();
 
     /**
      * Gets the historical performance of a specified stock.
@@ -52,7 +48,7 @@ public interface Trader {
      * @param stock The stock to analyze.
      * @return List<Double> representing the historical price data.
      */
-    // List<Double> analyzeStockPerformance(Stock stock);
+    List<Double> analyzeStockPerformance(Stock stock);
 
     /**
      * Provides an overview of the trader's portfolio performance, including total
@@ -60,8 +56,6 @@ public interface Trader {
      * 
      * @return String summary of portfolio performance.
      */
-    // String viewPortfolioPerformance();
+    String viewPortfolioPerformance();
 
-    // If we want, we can add a watch/wish list (requires add, remove, and view
-    // functions)
 }
