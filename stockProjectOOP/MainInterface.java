@@ -21,22 +21,26 @@ public class MainInterface extends javax.swing.JFrame {
     public MainInterface() {
         initComponents();
 
+        // Getting dimensions of screen and centering the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((screenSize.getWidth() - this.getWidth()) / 2);
         int y = (int) ((screenSize.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
 
+        // Preventing the window from being moved
         this.addComponentListener(new ComponentAdapter() {
             public void componentMoved(ComponentEvent e) {
                 setLocation(x, y);
             }
         });
 
+        // Initializing graph with 5 weeks of data
         for (int i = 0; i < 5; i++){
             market.Simulate_Week();
             WEEKS++;
         }
 
+        // Adding stocks to the graph
         for (Stock stock : market.market) {
             graphs.add(stock.getStockName(), createChartPanel(stock));
         }
@@ -47,6 +51,7 @@ public class MainInterface extends javax.swing.JFrame {
 
         weekTxt.setText(Integer.toString(WEEKS));
 
+        // Adding listener to detect when a tab is changed (and accordingly update the text fields/data)
         graphs.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt){
                 JTabbedPane pane = (JTabbedPane) evt.getSource();
@@ -273,6 +278,7 @@ public class MainInterface extends javax.swing.JFrame {
     }// </editor-fold>          
     
 
+    // Action listeners for buttons (simulate a week passing)
     private void simulateActionPerformed(java.awt.event.ActionEvent evt) {     
         market.Simulate_Week();
         WEEKS++;
@@ -303,7 +309,7 @@ public class MainInterface extends javax.swing.JFrame {
     }
 
     private void updateTextFields(Stock stock){
-        // set current price to 2 decimal places with formatting
+        // setting text fields to stock data and formatting to 2 decimal places
         currentPriceTxt.setText(String.format("%.2f", stock.getPrice()));
         lastPriceTxt.setText(String.format("%.2f", stock.getPriceHistory().get(stock.getPriceHistory().size() - 2)));
         percentChangeTxt.setText(String.format("%.2f", (stock.getPrice() - stock.getPriceHistory().get(stock.getPriceHistory().size() - 2)) / stock.getPriceHistory().get(stock.getPriceHistory().size() - 2) * 100) + "%");
@@ -347,18 +353,20 @@ public class MainInterface extends javax.swing.JFrame {
         });
     }
     
+    // Method to create a chart panel for a stock
     private static ChartPanel createChartPanel(Stock stock){
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         List<Double> priceHistory = stock.getPriceHistory();
         int i = 0;
 
+        // Adding data points to the chart using the stock's price history
         for (Double price : priceHistory) {
             dataset.addValue(price, stock.getStockName(), (Comparable<?>) i);
             i++;
         }
         
-        
+        // Creating the chart
         JFreeChart chart = ChartFactory.createLineChart(
                 stock.getStockName() + " Price",
                 "Week",
@@ -370,6 +378,7 @@ public class MainInterface extends javax.swing.JFrame {
                 false
         );
 
+        // Setting the range of the y-axis to be the min/max values of the data points (adjusted for padding)
         double minValue = Double.MAX_VALUE;
         double maxValue = Double.MIN_VALUE;
         for (Object rowKeyObj : dataset.getRowKeys()) {

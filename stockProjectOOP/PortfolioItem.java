@@ -8,13 +8,18 @@ public class PortfolioItem {
     private double purchasePrice;
     private Stock stockReference;
 
-/*=======================
-CONSTRUCTOR: PortfolioItem
-INPUT: stock (Stock) - the stock object, sharesOwned (int) - number of shares owned,
-        purchasePrice (double) - the price at which the shares were purchased.
-PROCESSING: Initializes a PortfolioItem with stock details and ownership information.
-OUTPUT: none
-=======================*/
+    /**
+     * CONSTRUCTOR: PortfolioItem
+     * 
+     * @param stock         (Stock) - the stock object.
+     * @param sharesOwned   (int) - number of shares owned.
+     * @param purchasePrice (double) - the price at which the shares were purchased.
+     * 
+     *                      PROCESSING: Initializes a PortfolioItem with stock
+     *                      details and ownership information.
+     * 
+     * @return none
+     */
     public PortfolioItem(Stock stock, int sharesOwned, double purchasePrice) {
         this.stockName = stock.getStockName();
         this.sharesOwned = sharesOwned;
@@ -22,9 +27,9 @@ OUTPUT: none
         this.stockReference = stock;
     }
 
-/*------------------
-GETTERS AND SETTERS
--------------------*/
+    /*------------------
+    GETTERS AND SETTERS
+    -------------------*/
 
     public String getStockName() {
         return stockName;
@@ -32,6 +37,10 @@ GETTERS AND SETTERS
 
     public int getSharesOwned() {
         return sharesOwned;
+    }
+
+    public void setSharesOwned(int newShares) {
+        sharesOwned = newShares;
     }
 
     public double getPurchasePrice() {

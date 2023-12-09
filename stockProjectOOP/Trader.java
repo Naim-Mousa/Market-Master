@@ -22,11 +22,18 @@ public interface Trader {
     boolean sellShares(Stock stock, int shares);
 
     /**
-     * Gets the current portfolio of the trader.
+     * Gets the current portfolio items of the trader.
      * 
      * @return A map of stock names to the number of shares owned.
      */
-    List<PortfolioItem> getPortfolio();
+    List<PortfolioItem> getPortfolioItems();
+
+    /**
+     * Gets the current portfolio object of the trader.
+     * 
+     * @return The portfolio object.
+     */
+    Portfolio getPortfolioObject();
 
     /**
      * Gets the current budget or balance of the trader.
@@ -35,16 +42,28 @@ public interface Trader {
      */
     double getBudget();
 
-    // !!!!!!!!!!!!!!
-    // FUNCTIONS WE SHOULD IMPLEMENT
-    // IN USER+AGENT CLASSES
+    /**
+     * Sets the current budget or balance of the trader.
+     * 
+     * @param newBudget The trader's new budget.
+     * @return none.
+     */
+    void setBudget(double newBudget);
+
+    /**
+     * Searches for a PortfolioItem in the trader's portfolio by stock name.
+     *
+     * @param stockName The name of the stock to find in the portfolio.
+     * @return PortfolioItem - the found PortfolioItem, or null if not found.
+     */
+    PortfolioItem findPortfolioItem(String stockName);
 
     /**
      * Calculates the total value of the trader's portfolio.
      * 
      * @return double representing the total value of the portfolio.
      */
-    // double evaluatePortfolioValue();
+    double evaluatePortfolioValue();
 
     /**
      * Gets the historical performance of a specified stock.
@@ -52,7 +71,7 @@ public interface Trader {
      * @param stock The stock to analyze.
      * @return List<Double> representing the historical price data.
      */
-    // List<Double> analyzeStockPerformance(Stock stock);
+    List<Double> analyzeStockPerformance(Stock stock);
 
     /**
      * Provides an overview of the trader's portfolio performance, including total
@@ -60,8 +79,6 @@ public interface Trader {
      * 
      * @return String summary of portfolio performance.
      */
-    // String viewPortfolioPerformance();
+    String viewPortfolioPerformance();
 
-    // If we want, we can add a watch/wish list (requires add, remove, and view
-    // functions)
 }
