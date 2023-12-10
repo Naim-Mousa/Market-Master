@@ -54,6 +54,10 @@ public class Market {
         this.marketTrend = trend;
     }
 
+    public void setEventListener(EventListener listener) {
+        this.events.setEventListener(listener);
+    }
+
     /*--------------
     GENERAL METHODS
     ----------------*/
