@@ -25,10 +25,12 @@ public class Events {
         eventList.add(new Event("Bitcoin Gone, Like For Real this time", 1.07));
         eventList.add(new Event("Q4 Go Womp Womp", 0.92));
         eventList.add(new Event("Taylor Swift Visits NYSE", 1.11));
-        eventList.add(new Event("USD Moves to Blockchain", 0.64));
+        eventList.add(new Event("USD Moves to Blockchain", 0.84));
         eventList.add(new Event("Global Warming Stops Warming", 1.09));
         eventList.add(new Event("Q3 Goes BOOM", 1.03));
+        eventList.add(new Event("Aliens Refuse to Visit Earth; Cite 'Too Much Drama'", 0.98));
         eventList.add(new Event("Ozempic Becomes Human Right", 1.06));
+        eventList.add(new Event("Cat Declared New President of Egypt", 1.03));
         eventList.add(new Event("Bing Chilling Named 2023 Word of Year", 0.90));
         eventList.add(new Event("2024 U.S. Presidential Elections Cancelled", 1.15));
         eventList.add(new Event("Hasan Aljabbouli Named Best Professor of the Year", 1.18));
@@ -37,6 +39,9 @@ public class Events {
         eventList.add(new Event("FBI raids Santa's workshops, finds evidence of slave labor", 0.75));
         eventList.add(new Event("Leonardo DiCaprio returns to star in 'Titanic 2: Revenge of the Ship'", 1.07));
         eventList.add(new Event("International Court of Justice rules in favor of calling it 'football' not 'soccer'", 1.05));
+        eventList.add(new Event("Mars Colony Declares Independence", 0.87));
+        eventList.add(new Event("Millennials Finally Afford Houses; Real Estate Market in Shambles", 0.86));
+        eventList.add(new Event("Scientists Discover China", 1.03));
     }
 
     /**
@@ -54,13 +59,14 @@ public class Events {
      * 
      * @param stock The stock to which the event is applied.
      * @return none
+     *         //
      */
     public void applyRandomEvent(Stock stock) {
-        if (!eventList.isEmpty() && random.nextDouble() < 0.04) { // 4% chance to trigger an event per stock
+        if (!eventList.isEmpty() && random.nextDouble() < 0.02) { // 2% chance to trigger an event per stock
             int eventIndex = random.nextInt(eventList.size());
             Event selectedEvent = eventList.get(eventIndex);
             stock.simulate(selectedEvent.getImpactFactor());
-            // System.out.println("BREAKING NEWS: " + selectedEvent.getName() + " on " + stock.getStockName());
+
             if (listener != null) {
                 listener.onEventOccured(selectedEvent.getName(), stock);
             }
