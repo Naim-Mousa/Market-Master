@@ -32,8 +32,14 @@ public class Events {
         eventList.add(new Event("Ozempic Becomes Human Right", 1.06));
         eventList.add(new Event("Cat Declared New President of Egypt", 1.03));
         eventList.add(new Event("Bing Chilling Named 2023 Word of Year", 0.90));
+        eventList.add(new Event("2024 U.S. Presidential Elections Cancelled", 1.15));
+        eventList.add(new Event("Hasan Aljabbouli Named Best Professor of the Year", 1.18));
+        eventList.add(new Event("Declassified NASA documents reveal Moon is made of cheese, dairy industry collapses", 0.92));
+        eventList.add(new Event("Garden Gnomes Occupy Wall Street, Demand Equal Rights", 0.85));
+        eventList.add(new Event("FBI raids Santa's workshops, finds evidence of slave labor", 0.75));
+        eventList.add(new Event("Leonardo DiCaprio returns to star in 'Titanic 2: Revenge of the Ship'", 1.07));
+        eventList.add(new Event("International Court of Justice rules in favor of calling it 'football' not 'soccer'", 1.05));
         eventList.add(new Event("Mars Colony Declares Independence", 0.87));
-        eventList.add(new Event("Santa Workshop Now Made Public", 1.02));
         eventList.add(new Event("Millennials Finally Afford Houses; Real Estate Market in Shambles", 0.86));
         eventList.add(new Event("Scientists Discover China", 1.03));
     }
