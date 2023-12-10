@@ -2,6 +2,7 @@ package stockProjectOOP;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -11,7 +12,7 @@ import java.awt.event.ComponentEvent;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-public class MainInterface extends javax.swing.JFrame {
+public class MainInterface extends javax.swing.JFrame implements EventListener{
     public static int WEEKS = 0;
      Market market = new Market();
 
@@ -20,6 +21,8 @@ public class MainInterface extends javax.swing.JFrame {
      */
     public MainInterface() {
         initComponents();
+
+        market.setEventListener(this);
 
         // Getting dimensions of screen and centering the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -96,8 +99,69 @@ public class MainInterface extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         this.setResizable(false);
+        jPanel1 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                // need to make image fit screen and make it dimmer
+                super.paintComponent(g);
+                g.drawImage(new javax.swing.ImageIcon("long.png").getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+                g.setColor(new Color(0, 0, 0, 150));
+                g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            }
+        };
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        // Make jButtons blue, and then upon hovering, make them purple
+        viewPortfolio.setBackground(new java.awt.Color(73,109,137));
+        viewPortfolio.setForeground(new java.awt.Color(255, 255, 255));
+        viewPortfolio.setBorderPainted(false);
+        viewPortfolio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                viewPortfolio.setBackground(new java.awt.Color(128, 0, 128));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                viewPortfolio.setBackground(new java.awt.Color(73,109,137));
+            }
+        });
+
+        buyStocks.setBackground(new java.awt.Color(73,109,137));
+        buyStocks.setForeground(new java.awt.Color(255, 255, 255));
+        buyStocks.setBorderPainted(false);
+        buyStocks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                buyStocks.setBackground(new java.awt.Color(128, 0, 128));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                buyStocks.setBackground(new java.awt.Color(73,109,137));
+            }
+        });
+
+        sellStocks.setBackground(new java.awt.Color(73,109,137));
+        sellStocks.setForeground(new java.awt.Color(255, 255, 255));
+        sellStocks.setBorderPainted(false);
+        sellStocks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                sellStocks.setBackground(new java.awt.Color(128, 0, 128));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                sellStocks.setBackground(new java.awt.Color(73,109,137));
+            }
+        });
+
+        simulate.setBackground(new java.awt.Color(73,109,137));
+        simulate.setForeground(new java.awt.Color(255, 255, 255));
+        simulate.setBorderPainted(false);
+        simulate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                simulate.setBackground(new java.awt.Color(128, 0, 128));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                simulate.setBackground(new java.awt.Color(73,109,137));
+            }
+        });
+
+        graphs.setBackground(new java.awt.Color(255, 255, 255));
+        graphs.setForeground(new java.awt.Color(255, 255, 255));
+        graphs.setFont(new java.awt.Font("Segoe UI", 1, 12));
 
         viewPortfolio.setText("View Portfolio");
         viewPortfolio.addActionListener(new java.awt.event.ActionListener() {
@@ -398,6 +462,13 @@ public class MainInterface extends javax.swing.JFrame {
         chart.getCategoryPlot().getRangeAxis().setRange(minValue - padding, maxValue + padding);
         
         return new ChartPanel(chart);
+    }
+
+    @Override
+    public void onEventOccured(String eventName, Stock stock) {
+        // TODO Auto-generated method stub
+        JOptionPane.showMessageDialog(this, "BREAKING NEWS: " + eventName + " on " + stock.getStockName(), "BREAKING NEWS", JOptionPane.INFORMATION_MESSAGE);
+        
     }
 
     // Variables declaration - do not modify                     
