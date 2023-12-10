@@ -41,7 +41,16 @@ public class ViewPortfolio extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                // need to make image fit screen and make it dimmer
+                super.paintComponent(g);
+                g.drawImage(new javax.swing.ImageIcon("long.png").getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+                g.setColor(new Color(0, 0, 0, 150));
+                g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            }
+        };
 
         back.setText("Back");
         back.addActionListener(new java.awt.event.ActionListener() {
