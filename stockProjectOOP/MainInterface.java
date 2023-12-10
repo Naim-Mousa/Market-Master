@@ -2,6 +2,7 @@ package stockProjectOOP;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -11,7 +12,7 @@ import java.awt.event.ComponentEvent;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-public class MainInterface extends javax.swing.JFrame {
+public class MainInterface extends javax.swing.JFrame implements EventListener{
     public static int WEEKS = 0;
      Market market = new Market();
 
@@ -20,6 +21,8 @@ public class MainInterface extends javax.swing.JFrame {
      */
     public MainInterface() {
         initComponents();
+
+        market.setEventListener(this);
 
         // Getting dimensions of screen and centering the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -459,6 +462,13 @@ public class MainInterface extends javax.swing.JFrame {
         chart.getCategoryPlot().getRangeAxis().setRange(minValue - padding, maxValue + padding);
         
         return new ChartPanel(chart);
+    }
+
+    @Override
+    public void onEventOccured(String eventName, Stock stock) {
+        // TODO Auto-generated method stub
+        JOptionPane.showMessageDialog(this, "BREAKING NEWS: " + eventName + " on " + stock.getStockName(), "BREAKING NEWS", JOptionPane.INFORMATION_MESSAGE);
+        
     }
 
     // Variables declaration - do not modify                     
