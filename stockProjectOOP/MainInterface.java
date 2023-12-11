@@ -423,8 +423,9 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
 
         // Adding data points to the chart using the stock's price history
         for (Double price : priceHistory) {
-            dataset.addValue(price, stock.getStockName(), (Comparable<?>) i);
-            i++;
+            if (i <= WEEKS)
+                dataset.addValue(price, stock.getStockName(), (Comparable<?>) i);
+                i++;
         }
         
         // Creating the chart
@@ -465,7 +466,6 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
     public void onEventOccured(String eventName, Stock stock) {
         // TODO Auto-generated method stub
         JOptionPane.showMessageDialog(this, "BREAKING NEWS: " + eventName + " on " + stock.getStockName(), "BREAKING NEWS", JOptionPane.INFORMATION_MESSAGE);
-        
     }
 
     // Variables declaration - do not modify                     
