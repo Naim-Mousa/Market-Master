@@ -42,6 +42,7 @@ public class Events {
         eventList.add(new Event("Mars Colony Declares Independence", 0.87));
         eventList.add(new Event("Millennials Finally Afford Houses; Real Estate Market in Shambles", 0.86));
         eventList.add(new Event("Scientists Discover China", 1.03));
+        eventList.add(new Event("Mark Zuckerberg Sheds Skin for Winter", 1.02));
     }
 
     /**

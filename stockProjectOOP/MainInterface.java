@@ -15,6 +15,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class MainInterface extends javax.swing.JFrame implements EventListener{
     public static int WEEKS = 0;
      Market market = new Market();
+    User user = new User(100000);
 
     /**
      * Creates new form MainInterface
@@ -47,6 +48,10 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         for (Stock stock : market.market) {
             graphs.add(stock.getStockName(), createChartPanel(stock));
         }
+
+        graphs.setForegroundAt(0, Color.BLUE);
+        graphs.setForegroundAt(1, Color.BLUE);
+        graphs.setForegroundAt(2, Color.BLUE);
 
         // Set initial values for text fields
         Stock stock = market.market.get(0);
@@ -158,10 +163,6 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
                 simulate.setBackground(new java.awt.Color(73,109,137));
             }
         });
-
-        graphs.setBackground(new java.awt.Color(255, 255, 255));
-        graphs.setForeground(new java.awt.Color(255, 255, 255));
-        graphs.setFont(new java.awt.Font("Segoe UI", 1, 12));
 
         viewPortfolio.setText("View Portfolio");
         viewPortfolio.addActionListener(new java.awt.event.ActionListener() {
@@ -348,6 +349,9 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         for (Stock stock : market.market) {
             graphs.add(stock.getStockName(), createChartPanel(stock));
         }
+        graphs.setForegroundAt(0, Color.BLUE);
+        graphs.setForegroundAt(1, Color.BLUE);
+        graphs.setForegroundAt(2, Color.BLUE);
         weekTxt.setText(Integer.toString(WEEKS));
     }     
 
