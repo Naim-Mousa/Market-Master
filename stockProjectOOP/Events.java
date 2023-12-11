@@ -24,7 +24,7 @@ public class Events {
     private void initializeEvents() {
         eventList.add(new Event("Bitcoin Gone, Like For Real this time", 1.07));
         eventList.add(new Event("Q4 Go Womp Womp", 0.92));
-        eventList.add(new Event("Taylor Swift Visits NYSE", 1.11));
+        eventList.add(new Event("Taylor Swift Performs Cruel Summer in NYSE", 1.11));
         eventList.add(new Event("USD Moves to Blockchain", 0.84));
         eventList.add(new Event("Global Warming Stops Warming", 1.09));
         eventList.add(new Event("Q3 Goes BOOM", 1.03));
