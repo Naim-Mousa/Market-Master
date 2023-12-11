@@ -24,7 +24,6 @@
   - Limited to only 3 stocks
   - Timeline starts upon the first opening of the application and continues forward from there
     until user exits program.
-  - Every 10 seconds, a day passes
 
 ## File Descriptions
 
