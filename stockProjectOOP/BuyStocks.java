@@ -61,7 +61,6 @@ public class BuyStocks extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                // need to make image fit screen and make it dimmer
                 super.paintComponent(g);
                 g.drawImage(new javax.swing.ImageIcon("long.png").getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
                 g.setColor(new Color(0, 0, 0, 150));
