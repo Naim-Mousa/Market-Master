@@ -116,7 +116,7 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         viewPortfolio.setBorderPainted(false);
         viewPortfolio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                viewPortfolio.setBackground(new java.awt.Color(128, 0, 128));
+                viewPortfolio.setBackground(new java.awt.Color(153, 50, 204));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 viewPortfolio.setBackground(new java.awt.Color(73,109,137));
@@ -128,7 +128,7 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         buyStocks.setBorderPainted(false);
         buyStocks.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                buyStocks.setBackground(new java.awt.Color(128, 0, 128));
+                buyStocks.setBackground(new java.awt.Color(153, 50, 204));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 buyStocks.setBackground(new java.awt.Color(73,109,137));
@@ -140,7 +140,7 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         sellStocks.setBorderPainted(false);
         sellStocks.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                sellStocks.setBackground(new java.awt.Color(128, 0, 128));
+                sellStocks.setBackground(new java.awt.Color(153, 50, 204));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 sellStocks.setBackground(new java.awt.Color(73,109,137));
@@ -152,7 +152,7 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         simulate.setBorderPainted(false);
         simulate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                simulate.setBackground(new java.awt.Color(128, 0, 128));
+                simulate.setBackground(new java.awt.Color(153, 50, 204));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 simulate.setBackground(new java.awt.Color(73,109,137));
