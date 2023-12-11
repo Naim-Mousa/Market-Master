@@ -24,9 +24,9 @@ public class Market {
         this.events = new Events(); // Initialize Events
 
         // Adding initial stocks to the market
-        this.market.add(new Stock("Stock1", 150.00, 1000000));
-        this.market.add(new Stock("Stock2", 150.00, 2000000));
-        this.market.add(new Stock("Stock3", 150.00, 3000000));
+        this.market.add(new Stock("ByteMe Technologies", 150.00, 1000000));
+        this.market.add(new Stock("Overhyped Holdings Ltd.", 150.00, 2000000));
+        this.market.add(new Stock("Legit a Ponzi Scheme Inc.", 150.00, 3000000));
     }
 
     /*------------------
