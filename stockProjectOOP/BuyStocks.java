@@ -4,6 +4,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class BuyStocks extends javax.swing.JFrame {
     private MainInterface mf;
@@ -131,9 +132,36 @@ public class BuyStocks extends javax.swing.JFrame {
                     try {
                         int sharesToBuy = Integer.parseInt(sharesToBuyField.getText());
                         double cost = sharesToBuy * mf.market.market.get(index).getPrice();
-                        costField.setText(String.format("%.2f", cost));
+
+                        double userBudget = mf.user.getBudget();
+
+                        if (cost > userBudget){
+                            sharesToBuy = (int) (userBudget / mf.market.market.get(index).getPrice());
+                            cost = sharesToBuy * mf.market.market.get(index).getPrice();
+                        }
+
+                        final int sharesToBuyFinal = sharesToBuy;
+                        final double costFinal = cost;
+
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                if (costFinal > userBudget){
+                                    sharesToBuyField.setText(String.format("%d", sharesToBuyFinal));
+                                }
+                                if (costFinal <= 0){
+                                    costField.setText("Cannot buy anything");
+                                }
+                                else
+                                    costField.setText(String.format("%.2f", costFinal));
+                            }
+                        });
+
                     } catch (NumberFormatException e) {
-                        costField.setText(String.format("%.2f", mf.market.market.get(index).getPrice()));
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                costField.setText(String.format("%.2f", mf.market.market.get(index).getPrice()));
+                            }
+                        });
                     }
                 }
             }
@@ -271,6 +299,21 @@ public class BuyStocks extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             sharesToBuy = 1;
         }
+
+        // Calculate the cost and cap it based on the user's budget
+        double cost = sharesToBuy * mf.market.market.get(index).getPrice();
+        if (cost > mf.user.getBudget()){ 
+            if (mf.user.getBudget() < mf.market.market.get(index).getPrice()) {
+                JOptionPane.showMessageDialog(this,
+                    "You do not have enough budget to buy any shares of " +
+                    mf.market.market.get(index).getStockName() + ".",
+                    "Insufficient Budget", JOptionPane.ERROR_MESSAGE);
+                return; // Exit the method early
+            }
+            sharesToBuy = (int) (mf.user.getBudget() / mf.market.market.get(index).getPrice());
+            cost = sharesToBuy * mf.market.market.get(index).getPrice();
+        }
+
         int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to buy " + sharesToBuy + " share(s) of " + mf.market.market.get(index).getStockName() + " for $" + costField.getText() + "?\nYour budget is $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
             boolean transactionSuccess = mf.user.buyShares(mf.market.market.get(index), sharesToBuy);
