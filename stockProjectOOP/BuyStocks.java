@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.JOptionPane;
+
 public class BuyStocks extends javax.swing.JFrame {
     private MainInterface mf;
 
@@ -76,11 +78,6 @@ public class BuyStocks extends javax.swing.JFrame {
         });
 
         buyStock.setText("Buy Stock");
-        buyStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buyStockActionPerformed(evt);
-            }
-        }); 
 
         // Add list of stocks to buy from
         String[] stocks = new String[mf.market.market.size()];
@@ -267,7 +264,15 @@ public class BuyStocks extends javax.swing.JFrame {
     }    
     
     private void buyStockActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        int index = listOfStocks.getSelectedIndex();
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to buy " + sharesToBuyField.getText() + " shares of " + mf.market.market.get(index).getStockName() + " for $" + costField.getText() + "?\nYour budget is $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION){
+            mf.user.buyShares(mf.market.market.get(index), Integer.parseInt(sharesToBuyField.getText()));
+            JOptionPane.showMessageDialog(null, "Your budget is now $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "You have not bought any shares.", "Buy Stock", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -277,7 +282,7 @@ public class BuyStocks extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracale.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
