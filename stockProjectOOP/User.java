@@ -64,6 +64,10 @@ public class User implements Trader {
 
     @Override
     public boolean buyShares(Stock stock, int shares) {
+        PortfolioItem item = findPortfolioItem(stock.getStockName());
+        if (item == null){
+            updatePortfolio(stock, 0, true);
+        }
         return Transaction.portfolioBuy(this, stock, shares);
     }
 
