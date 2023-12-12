@@ -265,12 +265,27 @@ public class BuyStocks extends javax.swing.JFrame {
     
     private void buyStockActionPerformed(java.awt.event.ActionEvent evt) {                                         
         int index = listOfStocks.getSelectedIndex();
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to buy " + sharesToBuyField.getText() + " shares of " + mf.market.market.get(index).getStockName() + " for $" + costField.getText() + "?\nYour budget is $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.YES_NO_OPTION);
-        if (dialogResult == JOptionPane.YES_OPTION){
-            mf.user.buyShares(mf.market.market.get(index), Integer.parseInt(sharesToBuyField.getText()));
-            JOptionPane.showMessageDialog(null, "Your budget is now $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.INFORMATION_MESSAGE);
+        int sharesToBuy;
+        try {
+            sharesToBuy = Integer.parseInt(sharesToBuyField.getText());
+        } catch (NumberFormatException e) {
+            sharesToBuy = 1;
         }
-        else{
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to buy " + sharesToBuy + " share(s) of " + mf.market.market.get(index).getStockName() + " for $" + costField.getText() + "?\nYour budget is $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            boolean transactionSuccess = mf.user.buyShares(mf.market.market.get(index), sharesToBuy);
+            
+            if(transactionSuccess){
+                JOptionPane.showMessageDialog(null, "Your budget is now $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.INFORMATION_MESSAGE);
+    
+                // Refreshing the display
+                sharesField.setText(String.format("%d", mf.market.market.get(index).getShares()));
+            } else {
+                // Handle transaction failure
+                JOptionPane.showMessageDialog(null, "Transaction failed. Please check your budget or input.", "Buy Stock", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
             JOptionPane.showMessageDialog(null, "You have not bought any shares.", "Buy Stock", JOptionPane.INFORMATION_MESSAGE);
         }
     }
