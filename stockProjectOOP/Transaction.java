@@ -81,20 +81,12 @@ public class Transaction {
         // Get the current portfolioItem
         PortfolioItem item = trader.findPortfolioItem(stock.getStockName());
 
-        // Update shares if stock is already in portfolio
-        if (item != null) {
-            item.setSharesOwned(shares);
-        }
+        // Update the portfolio shares
+        item.setSharesOwned(item.getSharesOwned() + shares);
 
-        // If not, add stock to portfolio
-        else {
-            Portfolio portfolio = trader.getPortfolioObject();
-            portfolio.addPortfolioItem(new PortfolioItem(stock, shares, stock.getPrice()));
-        }
-        
         // Deduct shares from the market
         stock.setShares(stock.getShares() - shares);
-        
+
         return true;
 
     }
