@@ -111,15 +111,15 @@ public class Transaction {
         if (item != null && item.getSharesOwned() >= shares) {
             double revenue = shares * stock.getPrice();
 
-            trader.setBudget(trader.getBudget() + revenue); // Add revenue to budget
+            // Add revenue to budget
+            trader.setBudget(trader.getBudget() + revenue);
 
-            // Decrease share count or remove the item if all shares are sold
-            if (item.getSharesOwned() > shares) {
-                item.setSharesOwned(item.getSharesOwned() - shares);
-            } else {
-                Portfolio portfolio = trader.getPortfolioObject();
-                portfolio.removePortfolioItem(item);
-            }
+            // Decrease shares owned
+            item.setSharesOwned(item.getSharesOwned() - shares);
+
+            // Add shares back to the market
+            stock.setShares(stock.getShares() + shares);
+
             return true;
         }
         return false;
