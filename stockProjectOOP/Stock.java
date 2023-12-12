@@ -81,6 +81,20 @@ public double getPIF(){
         updateMarketCap();
     }
 
+/**
+ * METHOD: setShares
+ * 
+ * @param newShares (int) - the new number of shares.
+ *  
+ * PROCESSING: Sets the number of shares and updates market capitalization.
+ *  
+ * @return none
+ */
+    public void setShares(int shares){
+        this.shares = shares;
+        updateMarketCap();
+    }
+
 
 /*--------------
 GENERAL METHODS
