@@ -1,5 +1,10 @@
 # Object Oriented Programming - Final Project
 
+# IMPORTANT:
+  To read through the code of the program without it showing errors, download the respective JAR files 
+  present in the folder and add them to your external library section of your IDE. This program uses
+  JFreeChart and JCommon which are not present within the native build of Java. 
+
 # Project Description:
   This project will simulate a stock market for the user, enabling them to participate in stock
   market actions including buying and selling stocks. The stocks the user will be interacting with
