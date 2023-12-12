@@ -24,4 +24,62 @@
   - Limited to only 3 stocks
   - Timeline starts upon the first opening of the application and continues forward from there
     until user exits program.
-  - Every 10 seconds, a day passes
+
+## File Descriptions
+
+### 1. Agent.java
+- **Description:** Represents an agent in the stock market simulation. Agents may have specific behaviors or strategies in buying and selling stocks.
+
+### 2. BuyStocks.java
+- **Description:** Implements the GUI for buying stocks. This class includes a graphical interface allowing users to purchase stocks. It is associated with the `MainInterface` class.
+
+### 3. EventListener.java
+- **Description:** Manages events that occur in the stock market simulation. This class could include logic for handling various events that impact stock prices.
+
+### 4. Events.java
+- **Description:** Enumerates different types of events that can occur in the stock market simulation. This file defines event constants for easy reference.
+
+### 5. Main.java
+- **Description:** The main entry point for the stock market simulation. Manages the overall flow of the program, allowing users to buy and sell stocks, view their portfolio, and interact with specific companies.
+
+### 6. MainInterface.java
+- **Description:** Defines the main user interface for interacting with the stock market simulation. This interface likely includes methods for user input and display.
+
+### 7. Market.java
+- **Description:** Represents the overall stock market environment. Manages the state of the market, including stock prices, events, and agent interactions.
+
+### 8. Portfolio.java
+- **Description:** Represents a user's portfolio, including the stocks they own, the total portfolio value, and purchase/sell history.
+
+### 9. PortfolioItem.java
+- **Description:** Represents an individual item within a user's portfolio. Contains information about a specific stock, quantity owned, and profit/loss.
+
+### 10. SellStocks.java
+- **Description:** Implements the GUI for selling stocks. This class includes a graphical interface allowing users to sell stocks. It is associated with the `MainInterface` class.
+
+### 11. Stock.java
+- **Description:** Represents a stock with properties such as name, price, market capitalization, and price change over time.
+
+### 12. Trader.java
+- **Description:** Represents a trader participating in the stock market simulation. Traders may have specific behaviors or strategies.
+
+### 13. Transaction.java
+- **Description:** Provides an interface for buying and selling stocks. This file defines methods for executing transactions.
+
+### 14. User.java
+- **Description:** Represents a user participating in the stock market simulation. Manages user-specific data and interactions.
+
+### 15. ViewPortfolio.java
+- **Description:** Implements the GUI for viewing a user's portfolio. This class includes a graphical interface allowing users to view their portfolio. It is associated with the `MainInterface` class.
+
+## Usage
+
+1. **Compile and Run:**
+   - Compile the Java files using an IDE or command line.
+   - Run the `Main` class to start the stock market simulation.
+
+2. **Interaction:**
+   - Use the provided GUI to buy and sell stocks, view the portfolio, and interact with the simulation.
+
+3. **Customization:**
+   - Modify specific files to customize the simulation behavior, such as adding more stocks, adjusting event probabilities, or enhancing user interactions.
