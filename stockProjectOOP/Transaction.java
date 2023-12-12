@@ -91,6 +91,10 @@ public class Transaction {
             Portfolio portfolio = trader.getPortfolioObject();
             portfolio.addPortfolioItem(new PortfolioItem(stock, shares, stock.getPrice()));
         }
+        
+        // Deduct shares from the market
+        stock.setShares(stock.getShares() - shares);
+        
         return true;
 
     }
