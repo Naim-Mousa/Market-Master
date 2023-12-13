@@ -138,8 +138,8 @@ public class User implements Trader {
         }
 
         else {
-            if (existingItem != null && existingItem.getSharesOwned() > shares)
-                existingItem = new PortfolioItem(stock, existingItem.getSharesOwned() - shares, stock.getPrice());
+            if (existingItem.getSharesOwned() > shares)
+                existingItem.setSharesOwned(existingItem.getSharesOwned() - shares);
 
             else
                 portfolio.removePortfolioItem(existingItem);
