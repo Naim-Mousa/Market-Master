@@ -3,6 +3,11 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
 public class SellStocks extends javax.swing.JFrame {
     private MainInterface mf;
 
@@ -38,6 +43,11 @@ public class SellStocks extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         back = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        stockInfo = new javax.swing.JTable();
+        currBudgetlbl = new javax.swing.JLabel();
+        currBudgetField = new javax.swing.JTextField();
+        sellBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,19 +69,83 @@ public class SellStocks extends javax.swing.JFrame {
             }
         });
 
+        back.setText("Back");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
+        stockInfo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+            },
+            new String [] {
+                "Stock Name", "Shares Owned", "Curr. Purchase Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+
+        loadStockData();
+        jScrollPane1.setViewportView(stockInfo);
+
+        currBudgetlbl.setText("Current Budget: ");
+        currBudgetField.setText(String.format("$%.2f", mf.user.getBudget()));
+
+        currBudgetlbl.setOpaque(true);
+        currBudgetlbl.setBackground(new Color(0, 0, 0, 123)); // Semi-transparent black background
+        currBudgetlbl.setForeground(new Color(255, 255, 255)); // White text
+        currBudgetlbl.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Padding around the text
+
+        currBudgetField.setEditable(false);
+
+        sellBtn.setText("Sell Stock");
+        sellBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(511, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(currBudgetlbl, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(currBudgetField, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(237, 237, 237)
+                        .addComponent(sellBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(338, Short.MAX_VALUE)
+                .addGap(93, 93, 93)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(currBudgetlbl)
+                    .addComponent(currBudgetField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(sellBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -80,55 +154,75 @@ public class SellStocks extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>  
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {                                     
         mf.setVisible(true);
         this.setVisible(false);
-    }                                    
+    }    
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+    private void sellBtnActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        int row = stockInfo.getSelectedRow();
+        if (row != -1){
+            String stockName = (String) stockInfo.getValueAt(row, 0);
+            int sharesOwned = (int) stockInfo.getValueAt(row, 1);
+            SpinnerNumberModel model = new SpinnerNumberModel(1, 1, sharesOwned, 1);
+            javax.swing.JSpinner spinner = new javax.swing.JSpinner(model);
+            spinner.setPreferredSize(new Dimension(100, 30));
+
+            int result = JOptionPane.showOptionDialog(
+                this,
+                new Object[]{"How many shares of " + stockName + " do you want to sell? If writing, numbers above the cap will default to last left value.", spinner},
+                "Sell Shares",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null, null, null
+            );
+
+            if (result == JOptionPane.OK_OPTION){
+                int sharesToSell = (int) spinner.getValue();
+                boolean success = mf.user.sellShares(mf.user.findPortfolioItem(stockName).getStockReference(), sharesToSell);
+                if (success){
+                    JOptionPane.showMessageDialog(this, "Shares sold successfully!");
+                    currBudgetField.setText(String.format("$%.2f", mf.user.getBudget()));
+                    stockInfo.setValueAt(mf.user.findPortfolioItem(stockName).getSharesOwned(), row, 1);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "You do not own that many shares of " + stockName + ".", "Invalid Number of Shares", JOptionPane.WARNING_MESSAGE);
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SellStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SellStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SellStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SellStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            else{
+                JOptionPane.showMessageDialog(this, "Please select a stock to sell.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            }
         }
-        //</editor-fold>
+    }
+
+    private void loadStockData(){
+        for (PortfolioItem item : mf.user.getPortfolioItems()){
+            String stockName = item.getStockName();
+            int sharesOwned = item.getSharesOwned();
+            double currPurchasePrice = item.getPurchasePrice();
+            currPurchasePrice = Math.round(currPurchasePrice * 100.0) / 100.0;
+            Object[] data = {stockName, sharesOwned, currPurchasePrice};
+            ((javax.swing.table.DefaultTableModel)stockInfo.getModel()).addRow(data);
+        }
     }
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton back;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton sellBtn;
+    private javax.swing.JTextField currBudgetField;
+    private javax.swing.JLabel currBudgetlbl;
+    private javax.swing.JTable stockInfo;
     // End of variables declaration                   
 }
