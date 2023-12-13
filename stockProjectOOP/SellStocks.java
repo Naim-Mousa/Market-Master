@@ -193,7 +193,12 @@ public class SellStocks extends javax.swing.JFrame {
                 if (success){
                     JOptionPane.showMessageDialog(this, "Shares sold successfully!");
                     currBudgetField.setText(String.format("$%.2f", mf.user.getBudget()));
-                    stockInfo.setValueAt(mf.user.findPortfolioItem(stockName).getSharesOwned(), row, 1);
+                    if (sharesOwned - sharesToSell == 0){
+                        ((javax.swing.table.DefaultTableModel)stockInfo.getModel()).removeRow(row);
+                    }
+                    else{
+                        stockInfo.setValueAt(sharesOwned - sharesToSell, row, 1);
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(this, "You do not own that many shares of " + stockName + ".", "Invalid Number of Shares", JOptionPane.WARNING_MESSAGE);
