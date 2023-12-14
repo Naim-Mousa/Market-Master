@@ -85,17 +85,7 @@ public class User implements Trader {
      */
     @Override
     public boolean sellShares(Stock stock, int shares) {
-
-        PortfolioItem item = findPortfolioItem(stock.getStockName());
-
-        if (item != null && item.getSharesOwned() >= shares) {
-            stock.sellShares(shares);
-            budget += shares * stock.getPrice();
-            updatePortfolio(stock, shares, false);
-            return true;
-        }
-
-        return false;
+        return Transaction.portfolioSell(this, stock, shares);
     }
 
     /**
