@@ -75,7 +75,7 @@ public class Market {
             stock.simulate(this.marketTrend);
         }
 
-        // executeAgentTrades(); // Agent makes trades during the simulation
+        executeAgentTrades(); // Agent makes trades during the simulation
     }
 
     /**
@@ -90,12 +90,14 @@ public class Market {
         // Carry out 4 transactions
         for (int i = 1; i <= 4; i++) {
             int index = random.nextInt(market.size());
-            if (random.nextInt(2) == 1) {
-                agent.buyShares(market.get(index), 0);
+            if (random.nextInt(2) == 1){
+                int shares = random.nextInt(market.get(index).getShares()/2);
+                Transaction.buy(agent, market.get(index), shares);
             }
 
-            else {
-                agent.sellShares(market.get(index), 0);
+            else{
+                int shares = random.nextInt(agent.getPortfolioObject().getPortfolioItem(market.get(index).getStockName()).getSharesOwned()/2);
+                Transaction.sell(agent, market.get(index), shares);
             }
         }
     }

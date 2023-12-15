@@ -51,6 +51,10 @@ public class PortfolioItem {
         return purchasePrice;
     }
 
+    public void setPurchasePrice(double price){
+        purchasePrice = price;
+    }
+
     public double getCurrentValue() {
         return sharesOwned * stockReference.getPrice();
     }
