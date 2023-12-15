@@ -76,6 +76,7 @@ public class SellStocks extends javax.swing.JFrame {
             }
         });
 
+        // Initializing the table to hold stock info
         stockInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
             },
@@ -92,6 +93,7 @@ public class SellStocks extends javax.swing.JFrame {
             }
         });
 
+        // Loading stock data into table
         loadStockData();
         jScrollPane1.setViewportView(stockInfo);
 
@@ -99,9 +101,9 @@ public class SellStocks extends javax.swing.JFrame {
         currBudgetField.setText(String.format("$%.2f", mf.user.getBudget()));
 
         currBudgetlbl.setOpaque(true);
-        currBudgetlbl.setBackground(new Color(0, 0, 0, 123)); // Semi-transparent black background
-        currBudgetlbl.setForeground(new Color(255, 255, 255)); // White text
-        currBudgetlbl.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Padding around the text
+        currBudgetlbl.setBackground(new Color(0, 0, 0, 123)); 
+        currBudgetlbl.setForeground(new Color(255, 255, 255)); 
+        currBudgetlbl.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
 
         currBudgetField.setEditable(false);
 
@@ -170,12 +172,12 @@ public class SellStocks extends javax.swing.JFrame {
     }    
 
     private void sellBtnActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        int row = stockInfo.getSelectedRow();
-        if (row != -1){
-            String stockName = (String) stockInfo.getValueAt(row, 0);
-            int sharesOwned = (int) stockInfo.getValueAt(row, 1);
-            SpinnerNumberModel model = new SpinnerNumberModel(1, 1, sharesOwned, 1);
-            javax.swing.JSpinner spinner = new javax.swing.JSpinner(model);
+        int row = stockInfo.getSelectedRow(); // get selected row
+        if (row != -1){ // if a row is selected
+            String stockName = (String) stockInfo.getValueAt(row, 0); // get stock name
+            int sharesOwned = (int) stockInfo.getValueAt(row, 1); // get shares owned
+            SpinnerNumberModel model = new SpinnerNumberModel(1, 1, sharesOwned, 1);   // incrementer
+            javax.swing.JSpinner spinner = new javax.swing.JSpinner(model); // create spinner
             spinner.setPreferredSize(new Dimension(100, 30));
 
             int result = JOptionPane.showOptionDialog(
@@ -189,12 +191,12 @@ public class SellStocks extends javax.swing.JFrame {
 
             if (result == JOptionPane.OK_OPTION){
                 int sharesToSell = (int) spinner.getValue();
-                boolean success = mf.user.sellShares(mf.user.findPortfolioItem(stockName).getStockReference(), sharesToSell);
+                boolean success = mf.user.sellShares(mf.user.findPortfolioItem(stockName).getStockReference(), sharesToSell); // sell shares
                 if (success){
                     JOptionPane.showMessageDialog(this, "Shares sold successfully!");
                     currBudgetField.setText(String.format("$%.2f", mf.user.getBudget()));
                     if (sharesOwned - sharesToSell == 0){
-                        ((javax.swing.table.DefaultTableModel)stockInfo.getModel()).removeRow(row);
+                        ((javax.swing.table.DefaultTableModel)stockInfo.getModel()).removeRow(row); // remove row if no more shares owned
                     }
                     else{
                         stockInfo.setValueAt(sharesOwned - sharesToSell, row, 1);
@@ -210,6 +212,7 @@ public class SellStocks extends javax.swing.JFrame {
         }
     }
 
+    // loads stock data into table
     private void loadStockData(){
         for (PortfolioItem item : mf.user.getPortfolioItems()){
             String stockName = item.getStockName();
