@@ -81,6 +81,20 @@ public double getPIF(){
         updateMarketCap();
     }
 
+/**
+ * METHOD: setShares
+ * 
+ * @param newShares (int) - the new number of shares.
+ *  
+ * PROCESSING: Sets the number of shares and updates market capitalization.
+ *  
+ * @return none
+ */
+    public void setShares(int shares){
+        this.shares = shares;
+        updateMarketCap();
+    }
+
 
 /*--------------
 GENERAL METHODS
@@ -163,38 +177,6 @@ GENERAL METHODS
  */
     public void updatePrice(){
         applyPriceChange((random.nextDouble() - 0.5) * volatility);
-    }
-
-/**
- * METHOD: buyShares
- * 
- * @param shares (int) - number of shares to buy.
- * 
- * PROCESSING: Decreases the available shares and adjusts the stock price based on the PIF.
- * 
- * @return none
- */
-    public void buyShares(int shares){
-        if (this.shares < shares){
-            System.out.println("Not enough shares available to buy.");
-            return;
-        }
-        this.shares -= shares;
-        applyPriceChange(shares * this.pif);
-    }
-
-/**
- * METHOD: sellShares
- * 
- * @param shares (int) - number of shares to sell.
- * 
- * PROCESSING: Increases the available shares and adjusts the stock price based on the PIF.
- * 
- * @return none
- */
-    public void sellShares(int shares){
-        this.shares += shares;
-        applyPriceChange(-shares * this.pif);
     }
 
 /**

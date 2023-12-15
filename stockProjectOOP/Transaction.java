@@ -20,42 +20,6 @@ public class Transaction {
     }
 
     /**
-     * Buys stocks for a trader.
-     *
-     * @param trader The trader (User or Agent) buying the stock.
-     * @param stock  The stock to be purchased.
-     * @param shares Number of shares to buy.
-     * @return true if the transaction was successful, false otherwise.
-     */
-    public static boolean buy(Trader trader, Stock stock, int shares) {
-        if (stock == null || trader == null) {
-            return false;
-        }
-
-        // Check if the trader has enough budget
-        if (checkFunds(trader, stock, shares)) {
-            return trader.buyShares(stock, shares);
-        }
-        return false;
-    }
-
-    /**
-     * Sells stocks for a trader.
-     * 
-     * @param trader The trader (User or Agent) selling the stock.
-     * @param stock  The stock to be sold.
-     * @param shares Number of shares to sell.
-     * @return true if the transaction was successful, false otherwise.
-     */
-    public static boolean sell(Trader trader, Stock stock, int shares) {
-        if (stock == null || trader == null) {
-            return false;
-        }
-
-        return trader.sellShares(stock, shares);
-    }
-
-    /**
      * Performs a stock purchase transaction for a trader.
      * It deducts the total cost of the shares from the trader's budget
      * and updates the trader's portfolio by adding or increasing the shares of
@@ -67,7 +31,7 @@ public class Transaction {
      * @return true if the transaction was successful (i.e., the trader had enough
      *         funds and the portfolio was updated), false otherwise.
      */
-    public static boolean portfolioBuy(Trader trader, Stock stock, int shares) {
+    public static boolean buy(Trader trader, Stock stock, int shares) {
 
         // Check if necessary funds exist
         double cost = stock.getPrice() * shares;
@@ -78,21 +42,12 @@ public class Transaction {
         // Set the new budget
         trader.setBudget(trader.getBudget() - cost);
 
-        // Get the current portfolioItem
-        PortfolioItem item = trader.findPortfolioItem(stock.getStockName());
+        trader.getPortfolioObject().updatePortfolio(stock, shares, true);
 
-        // Update shares if stock is already in portfolio
-        if (item != null) {
-            item.setSharesOwned(shares);
-        }
+        // Deduct shares from the market
+        stock.setShares(stock.getShares() - shares);
 
-        // If not, add stock to portfolio
-        else {
-            Portfolio portfolio = trader.getPortfolioObject();
-            portfolio.addPortfolioItem(new PortfolioItem(stock, shares, stock.getPrice()));
-        }
         return true;
-
     }
 
     /**
@@ -108,24 +63,25 @@ public class Transaction {
      *         shares and the portfolio and budget were updated accordingly),
      *         false otherwise.
      */
-    public static boolean portfolioSell(Trader trader, Stock stock, int shares) {
+    public static boolean sell(Trader trader, Stock stock, int shares) {
 
-        PortfolioItem item = trader.findPortfolioItem(stock.getStockName());
+        PortfolioItem item = trader.getPortfolioObject().findPortfolioItem(stock.getStockName());
 
-        if (item != null && item.getSharesOwned() >= shares) {
+        if (item != null && item.getSharesOwned() >= shares){
+
             double revenue = shares * stock.getPrice();
 
-            trader.setBudget(trader.getBudget() + revenue); // Add revenue to budget
+            // Add revenue to budget
+            trader.setBudget(trader.getBudget() + revenue);
 
-            // Decrease share count or remove the item if all shares are sold
-            if (item.getSharesOwned() > shares) {
-                item.setSharesOwned(item.getSharesOwned() - shares);
-            } else {
-                Portfolio portfolio = trader.getPortfolioObject();
-                portfolio.removePortfolioItem(item);
-            }
+            trader.getPortfolioObject().updatePortfolio(stock, shares, false);
+
+            // Add shares back to the market
+            stock.setShares(stock.getShares() + shares);
+
             return true;
         }
+
         return false;
     }
 }

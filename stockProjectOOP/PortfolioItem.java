@@ -35,6 +35,10 @@ public class PortfolioItem {
         return stockName;
     }
 
+    public Stock getStockReference() {
+        return stockReference;
+    }
+
     public int getSharesOwned() {
         return sharesOwned;
     }
@@ -45,6 +49,10 @@ public class PortfolioItem {
 
     public double getPurchasePrice() {
         return purchasePrice;
+    }
+
+    public void setPurchasePrice(double price){
+        purchasePrice = price;
     }
 
     public double getCurrentValue() {

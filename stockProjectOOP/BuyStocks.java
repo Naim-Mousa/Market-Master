@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 public class BuyStocks extends javax.swing.JFrame {
     private MainInterface mf;
 
@@ -38,13 +41,29 @@ public class BuyStocks extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         back = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listOfStocks = new javax.swing.JList<>();
+        jPanel2 = new javax.swing.JPanel();
+        sharesLbl = new javax.swing.JLabel();
+        pricesPerShare = new javax.swing.JLabel();
+        sharesToBuy = new javax.swing.JLabel();
+        sharesField = new javax.swing.JTextField();
+        pricePerShareField = new javax.swing.JTextField();
+        sharesToBuyField = new javax.swing.JTextField();
+        costLbl = new javax.swing.JLabel();
+        costField = new javax.swing.JTextField();
+        buyStock = new javax.swing.JButton();
+        
+        sharesField.setEditable(false);
+        pricePerShareField.setEditable(false);
+        costField.setEditable(false);
+        sharesToBuyField.setEditable(false);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1 = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                // need to make image fit screen and make it dimmer
                 super.paintComponent(g);
                 g.drawImage(new javax.swing.ImageIcon("long.png").getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
                 g.setColor(new Color(0, 0, 0, 150));
@@ -59,6 +78,169 @@ public class BuyStocks extends javax.swing.JFrame {
             }
         });
 
+        buyStock.setText("Buy Stock");
+
+        // Add list of stocks to buy from
+        String[] stocks = new String[mf.market.market.size()];
+        for (int i = 0; i < mf.market.market.size(); i++) {
+            stocks[i] = mf.market.market.get(i).getStockName();
+        }
+        listOfStocks.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = stocks;
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public String getElementAt(int i) {
+                return strings[i];
+            }
+        });
+        jScrollPane1.setViewportView(listOfStocks);
+
+        // Displaying the number of shares, price per share, and cost of the stock based on stock that is selected. If another stock is selected, the number of shares to buy should be reset to blank
+        listOfStocks.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                int index = listOfStocks.getSelectedIndex();
+                if (index >= 0) {
+                    sharesField.setText(String.format("%d", mf.market.market.get(index).getShares()));
+                    pricePerShareField.setText(String.format("%.2f", mf.market.market.get(index).getPrice()));
+                    sharesToBuyField.setText("");
+                    sharesToBuyField.setEditable(true);
+                    costField.setText(String.format("%.2f", mf.market.market.get(index).getPrice()));
+                }
+            }
+        });
+
+        // Calculate the cost of the stock based on the number of shares to buy (in real time)
+        sharesToBuyField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void changedUpdate(javax.swing.event.DocumentEvent evt) {
+                updateCost();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent evt) {
+                updateCost();
+            }
+
+            public void insertUpdate(javax.swing.event.DocumentEvent evt) {
+                updateCost();
+            }
+
+            public void updateCost() {
+                int index = listOfStocks.getSelectedIndex();
+                if (index >= 0) {
+                    try {
+                        int sharesToBuy = Integer.parseInt(sharesToBuyField.getText());
+                        double cost = sharesToBuy * mf.market.market.get(index).getPrice();
+
+                        double userBudget = mf.user.getBudget();
+
+                        if (cost > userBudget){
+                            sharesToBuy = (int) (userBudget / mf.market.market.get(index).getPrice());
+                            cost = sharesToBuy * mf.market.market.get(index).getPrice();
+                        }
+
+                        final int sharesToBuyFinal = sharesToBuy;
+                        final double costFinal = cost;
+
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                if (costFinal > userBudget){
+                                    sharesToBuyField.setText(String.format("%d", sharesToBuyFinal));
+                                }
+                                if (costFinal <= 0){
+                                    costField.setText("Cannot buy anything");
+                                }
+                                else
+                                    costField.setText(String.format("%.2f", costFinal));
+                            }
+                        });
+
+                    } catch (NumberFormatException e) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                costField.setText(String.format("%.2f", mf.market.market.get(index).getPrice()));
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+
+        sharesLbl.setText("Shares:");
+
+        pricesPerShare.setText("Price Per Share: ");
+
+        sharesToBuy.setText("Shares to Buy: ");
+
+        costLbl.setText("Cost:");
+
+        buyStock.setText("Buy Stock");
+        buyStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyStockActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(sharesLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(sharesField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(pricesPerShare, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                            .addComponent(sharesToBuy, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(costLbl, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pricePerShareField)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sharesToBuyField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addGap(51, 51, 51)
+                .addComponent(buyStock, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sharesLbl)
+                    .addComponent(sharesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(pricesPerShare)
+                            .addComponent(pricePerShareField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sharesToBuy)
+                            .addComponent(sharesToBuyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(buyStock)
+                        .addGap(27, 27, 27)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(costLbl)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -66,12 +248,22 @@ public class BuyStocks extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(511, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(110, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(105, 105, 105))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(338, Short.MAX_VALUE)
+                .addContainerGap(104, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
                 .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -82,7 +274,7 @@ public class BuyStocks extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,12 +284,54 @@ public class BuyStocks extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>                             
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {                                     
         mf.setVisible(true);
         this.setVisible(false);
-    }                                    
+    }    
+    
+    private void buyStockActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        int index = listOfStocks.getSelectedIndex();
+        int sharesToBuy;
+        try {
+            sharesToBuy = Integer.parseInt(sharesToBuyField.getText());
+        } catch (NumberFormatException e) {
+            sharesToBuy = 1;
+        }
+
+        // Calculate the cost and cap it based on the user's budget
+        double cost = sharesToBuy * mf.market.market.get(index).getPrice();
+        if (cost > mf.user.getBudget()){ 
+            if (mf.user.getBudget() < mf.market.market.get(index).getPrice()) {
+                JOptionPane.showMessageDialog(this,
+                    "You do not have enough budget to buy any shares of " +
+                    mf.market.market.get(index).getStockName() + ".",
+                    "Insufficient Budget", JOptionPane.ERROR_MESSAGE);
+                return; // Exit the method early
+            }
+            sharesToBuy = (int) (mf.user.getBudget() / mf.market.market.get(index).getPrice());
+            cost = sharesToBuy * mf.market.market.get(index).getPrice();
+        }
+
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to buy " + sharesToBuy + " share(s) of " + mf.market.market.get(index).getStockName() + " for $" + costField.getText() + "?\nYour budget is $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            boolean transactionSuccess = mf.user.buyShares(mf.market.market.get(index), sharesToBuy);
+            
+            if(transactionSuccess){
+                JOptionPane.showMessageDialog(null, "Your budget is now $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.INFORMATION_MESSAGE);
+    
+                // Refreshing the display
+                sharesField.setText(String.format("%d", mf.market.market.get(index).getShares()));
+            } else {
+                // Handle transaction failure
+                JOptionPane.showMessageDialog(null, "Transaction failed. Please check your budget or input.", "Buy Stock", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "You have not bought any shares.", "Buy Stock", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -106,7 +340,7 @@ public class BuyStocks extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracale.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -130,5 +364,17 @@ public class BuyStocks extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private javax.swing.JButton back;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList listOfStocks;
+    private javax.swing.JButton buyStock;
+    private javax.swing.JLabel costLbl;
+    private javax.swing.JTextField costField;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField pricePerShareField;
+    private javax.swing.JLabel pricesPerShare;
+    private javax.swing.JTextField sharesField;
+    private javax.swing.JLabel sharesLbl;
+    private javax.swing.JTextField sharesToBuyField;
+    private javax.swing.JLabel sharesToBuy;
     // End of variables declaration                   
 }
