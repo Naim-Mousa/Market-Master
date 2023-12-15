@@ -1,9 +1,7 @@
 package stockProjectOOP;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Portfolio {
 
@@ -92,36 +90,51 @@ public class Portfolio {
     }
 
     /**
-     * Retrieves the price history of a specific stock in the portfolio.
-     *
-     * @param stockName The name of the stock.
-     * @return List<Double> representing the price history of the stock, or null if
-     *         the stock is not in the portfolio.
+     * METHOD: updatePortfolio
+     * 
+     * @param stock    (Stock) - the stock being bought or sold.
+     * @param shares   (int) - the number of shares being bought or sold.
+     * @param isBuying (boolean) - Flag indicating if the operation is a buy (TRUE)
+     *                 or sell (FALSE).
+     * 
+     *                 PROCESSING: Updates the portfolio to add a new item or update
+     *                 an existing item based on the buy/sell operation.
+     * 
+     * @return none
      */
-    public List<Double> getPriceHistory(String stockName) {
-        for (PortfolioItem item : items) {
-            if (item.getStockName().equals(stockName)) {
-                return item.getStockPriceHistory();
-            }
+    public void updatePortfolio(Stock stock, int shares, boolean isBuying) {
+
+        PortfolioItem existingItem = findPortfolioItem(stock.getStockName());
+
+        if (isBuying) {
+            if (existingItem == null)
+                this.addPortfolioItem(new PortfolioItem(stock, shares, stock.getPrice()));
+            else
+                existingItem.setSharesOwned(existingItem.getSharesOwned() + shares);
+                existingItem.setPurchasePrice((existingItem.getPurchasePrice() + stock.getPrice()) / 2);
         }
-        return null; // Stock not found in the portfolio
+
+        else {
+            if (existingItem.getSharesOwned() > shares)
+                existingItem.setSharesOwned(existingItem.getSharesOwned() - shares);
+
+            else
+                this.removePortfolioItem(existingItem);
+        }
     }
 
     /**
-     * Retrieves the price history for each stock in the portfolio.
-     *
-     * @return A map where each key is a stock name and each value is the price
-     *         history of that stock.
+     * METHOD: findPortfolioItem
+     * 
+     * @param stockName (String) - the name of the stock to find in the portfolio.
+     * 
+     *                  PROCESSING: Searches for a PortfolioItem in the user's
+     *                  portfolio by stock name.
+     * 
+     * @return PortfolioItem - the found PortfolioItem, or null if not found.
      */
-    public Map<String, List<Double>> getAllPriceHistories() {
-        Map<String, List<Double>> priceHistoryMap = new HashMap<>();
-
-        for (PortfolioItem item : items) {
-            String stockName = item.getStockName();
-            List<Double> stockPriceHistory = getPriceHistory(stockName);
-            priceHistoryMap.put(stockName, stockPriceHistory);
-        }
-
-        return priceHistoryMap;
+    public PortfolioItem findPortfolioItem(String stockName) {
+        return this.getPortfolioItem(stockName);
     }
+
 }

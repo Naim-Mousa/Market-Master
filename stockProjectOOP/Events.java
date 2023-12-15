@@ -48,16 +48,6 @@ public class Events {
     }
 
     /**
-     * Sets the event listener.
-     * 
-     * @param listener The event listener.
-     * @return none
-     */
-    public void setEventListener(EventListener listener) {
-        this.listener = listener;
-    }
-
-    /**
      * Applies a random event to a stock and then removes that event from the list.
      * 
      * @param stock The stock to which the event is applied.
