@@ -107,7 +107,7 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         jPanel1 = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                // need to make image fit screen and make it dimmer
+                // Adding 'logo' background image
                 super.paintComponent(g);
                 g.drawImage(new javax.swing.ImageIcon("long.png").getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
                 g.setColor(new Color(0, 0, 0, 150));
@@ -356,12 +356,6 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         weekTxt.setText(Integer.toString(WEEKS));
     }     
 
-    private void viewPortfolioActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        ViewPortfolio viewPortfolio = new ViewPortfolio(this);
-        viewPortfolio.setVisible(true);
-        this.setVisible(false);
-    }
-
     private void buyStocksActionPerformed(java.awt.event.ActionEvent evt) {                                          
         BuyStocks buyStocks = new BuyStocks(this);
         buyStocks.setVisible(true);
@@ -371,6 +365,12 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
     private void sellStocksActionPerformed(java.awt.event.ActionEvent evt) {                                           
         SellStocks sellStocks = new SellStocks(this);
         sellStocks.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void viewPortfolioActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        ViewPortfolio viewPortfolio = new ViewPortfolio(this);
+        viewPortfolio.setVisible(true);
         this.setVisible(false);
     }
 
@@ -467,6 +467,7 @@ public class MainInterface extends javax.swing.JFrame implements EventListener{
         return new ChartPanel(chart);
     }
 
+    // Displaying events in a pop-up window
     @Override
     public void onEventOccured(String eventName, Stock stock) {
         // TODO Auto-generated method stub

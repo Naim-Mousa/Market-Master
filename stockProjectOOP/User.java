@@ -64,6 +64,10 @@ public class User implements Trader {
 
     @Override
     public boolean buyShares(Stock stock, int shares) {
+        PortfolioItem item = findPortfolioItem(stock.getStockName());
+        if (item == null){
+            updatePortfolio(stock, 0, true);
+        }
         return Transaction.portfolioBuy(this, stock, shares);
     }
 
@@ -81,17 +85,7 @@ public class User implements Trader {
      */
     @Override
     public boolean sellShares(Stock stock, int shares) {
-
-        PortfolioItem item = findPortfolioItem(stock.getStockName());
-
-        if (item != null && item.getSharesOwned() >= shares) {
-            stock.sellShares(shares);
-            budget += shares * stock.getPrice();
-            updatePortfolio(stock, shares, false);
-            return true;
-        }
-
-        return false;
+        return Transaction.portfolioSell(this, stock, shares);
     }
 
     /**
@@ -134,8 +128,8 @@ public class User implements Trader {
         }
 
         else {
-            if (existingItem != null && existingItem.getSharesOwned() > shares)
-                existingItem = new PortfolioItem(stock, existingItem.getSharesOwned() - shares, stock.getPrice());
+            if (existingItem.getSharesOwned() > shares)
+                existingItem.setSharesOwned(existingItem.getSharesOwned() - shares);
 
             else
                 portfolio.removePortfolioItem(existingItem);

@@ -35,6 +35,10 @@ public class PortfolioItem {
         return stockName;
     }
 
+    public Stock getStockReference() {
+        return stockReference;
+    }
+
     public int getSharesOwned() {
         return sharesOwned;
     }
