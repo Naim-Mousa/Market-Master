@@ -191,7 +191,7 @@ public class SellStocks extends javax.swing.JFrame {
 
             if (result == JOptionPane.OK_OPTION){
                 int sharesToSell = (int) spinner.getValue();
-                boolean success = mf.user.sellShares(mf.user.findPortfolioItem(stockName).getStockReference(), sharesToSell); // sell shares
+                boolean success = Transaction.sell(mf.user, mf.user.getPortfolioObject().findPortfolioItem(stockName).getStockReference(), sharesToSell); // sell shares
                 if (success){
                     JOptionPane.showMessageDialog(this, "Shares sold successfully!");
                     currBudgetField.setText(String.format("$%.2f", mf.user.getBudget()));

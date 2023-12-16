@@ -7,7 +7,7 @@ import java.util.Random;
 public class Market {
     public List<Stock> market = new ArrayList<Stock>();
     private double marketTrend;
-    private Agent agent = new Agent(10000);
+    private Agent agent = new Agent(100000);
     private Events events;
     private static final Random random = new Random();
 
@@ -24,9 +24,9 @@ public class Market {
         this.events = new Events(); // Initialize Events
 
         // Adding initial stocks to the market
-        this.market.add(new Stock("ByteMe Technologies", 150.00, 1000000));
-        this.market.add(new Stock("Overhyped Holdings Ltd.", 150.00, 2000000));
-        this.market.add(new Stock("Legit a Ponzi Scheme Inc.", 150.00, 3000000));
+        this.market.add(new Stock("ByteMe Technologies", 20.0, 1000));
+        this.market.add(new Stock("Overhyped Holdings Ltd.", 20.0, 2000));
+        this.market.add(new Stock("Legit a Ponzi Scheme Inc.", 20.0, 3000));
     }
 
     /*------------------
@@ -70,12 +70,11 @@ public class Market {
      * OUTPUT: none
      */
     public void Simulate_Week() {
+        executeAgentTrades(); // Agent makes trades during the simulation
         for (Stock stock : this.market) {
             events.applyRandomEvent(stock);
             stock.simulate(this.marketTrend);
         }
-
-        executeAgentTrades(); // Agent makes trades during the simulation
     }
 
     /**
@@ -91,13 +90,18 @@ public class Market {
         for (int i = 1; i <= 4; i++) {
             int index = random.nextInt(market.size());
             if (random.nextInt(2) == 1){
-                int shares = random.nextInt(market.get(index).getShares()/2);
+                int shares = random.nextInt(market.get(index).getShares()/10);
                 Transaction.buy(agent, market.get(index), shares);
             }
 
             else{
-                int shares = random.nextInt(agent.getPortfolioObject().getPortfolioItem(market.get(index).getStockName()).getSharesOwned()/2);
-                Transaction.sell(agent, market.get(index), shares);
+                if (agent.getPortfolioObject().getPortfolioItem(market.get(index).getStockName()) == null){
+                    continue;
+                }
+                else{
+                    int shares = random.nextInt(agent.getPortfolioObject().getPortfolioItem(market.get(index).getStockName()).getSharesOwned()/2);
+                    Transaction.sell(agent, market.get(index), shares);
+                }
             }
         }
     }

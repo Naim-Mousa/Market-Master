@@ -109,9 +109,10 @@ public class Portfolio {
         if (isBuying) {
             if (existingItem == null)
                 this.addPortfolioItem(new PortfolioItem(stock, shares, stock.getPrice()));
-            else
+            else{
                 existingItem.setSharesOwned(existingItem.getSharesOwned() + shares);
                 existingItem.setPurchasePrice((existingItem.getPurchasePrice() + stock.getPrice()) / 2);
+            }
         }
 
         else {
