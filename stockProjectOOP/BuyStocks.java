@@ -316,7 +316,7 @@ public class BuyStocks extends javax.swing.JFrame {
 
         int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to buy " + sharesToBuy + " share(s) of " + mf.market.market.get(index).getStockName() + " for $" + costField.getText() + "?\nYour budget is $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            boolean transactionSuccess = mf.user.buyShares(mf.market.market.get(index), sharesToBuy);
+            boolean transactionSuccess = Transaction.buy(mf.user, mf.market.market.get(index), sharesToBuy);
             
             if(transactionSuccess){
                 JOptionPane.showMessageDialog(null, "Your budget is now $" + String.format("%.2f", mf.user.getBudget()), "Buy Stock", JOptionPane.INFORMATION_MESSAGE);

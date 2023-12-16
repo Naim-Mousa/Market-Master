@@ -166,18 +166,6 @@ GENERAL METHODS
         this.priceHistory.add(this.price);
     }
 
-/**
- * METHOD: updatePrice
- * 
- * @param none
- * 
- * PROCESSING: Updates the stock price based on a random factor influenced by volatility.
- * 
- * @return none
- */
-    public void updatePrice(){
-        applyPriceChange((random.nextDouble() - 0.5) * volatility);
-    }
 
 /**
  * METHOD: simulate

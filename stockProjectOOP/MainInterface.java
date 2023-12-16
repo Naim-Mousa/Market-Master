@@ -14,7 +14,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 public class MainInterface extends javax.swing.JFrame implements EventListener{
     public static int WEEKS = 0;
-     Market market = new Market();
+    Market market = new Market();
     User user = new User(100000);
 
     /**

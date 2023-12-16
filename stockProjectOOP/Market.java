@@ -70,12 +70,11 @@ public class Market {
      * OUTPUT: none
      */
     public void Simulate_Week() {
+        executeAgentTrades(); // Agent makes trades during the simulation
         for (Stock stock : this.market) {
             events.applyRandomEvent(stock);
             stock.simulate(this.marketTrend);
         }
-
-        executeAgentTrades(); // Agent makes trades during the simulation
     }
 
     /**
@@ -96,8 +95,13 @@ public class Market {
             }
 
             else{
-                int shares = random.nextInt(agent.getPortfolioObject().getPortfolioItem(market.get(index).getStockName()).getSharesOwned()/2);
-                Transaction.sell(agent, market.get(index), shares);
+                if (agent.getPortfolioObject().getPortfolioItem(market.get(index).getStockName()) == null){
+                    continue;
+                }
+                else{
+                    int shares = random.nextInt(agent.getPortfolioObject().getPortfolioItem(market.get(index).getStockName()).getSharesOwned()/2);
+                    Transaction.sell(agent, market.get(index), shares);
+                }
             }
         }
     }
