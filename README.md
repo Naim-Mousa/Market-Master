@@ -1,12 +1,9 @@
 # Object Oriented Programming - Final Project
 
-# IMPORTANT:
-  To read through the code of the program without it showing errors, download the respective `JAR` files 
-  present in the folder and add them to your external library section of your IDE. This program uses
-  `JFreeChart` and `JCommon` which are not present within the native build of Java. 
-
-  In addition, for background image, open `JAR` file within project folder. Program will still work if `JAR` file outside,
-  but to have a background, open the executable `stockOOP.jar` file within the project folder.
+# IMPORTANT:  
+  To run the program without errors, download the provided `JAR` files and add them to your IDE's external library section. The program relies on `JFreeChart` and `JCommon`, which are not included in the native Java build. For the background image, open the JAR file within the project folder. While the program will function if the `JAR` file is placed outside, having a background requires opening the `stockOOP.jar` executable file within the project folder. Make sure to extract the `stockOOP.zip` folder.
+  
+  Run the `stockOOP.jar` in the folder. Run it within the folder to get the background (not necessary, but will prove to be a better experience).
 
 # Project Description:
   This project will simulate a stock market for the user, enabling them to participate in stock
